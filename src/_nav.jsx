@@ -12,6 +12,7 @@
 
 import React from 'react'
 import CIcon from '@coreui/icons-react'
+import { cilGlobeAlt } from '@coreui/icons'
 import {
   cilBell,
   cilCalculator,
@@ -87,13 +88,23 @@ const _nav = [
   },
   {
     component: CNavTitle,
+    name: 'Direcciones',
+  },
+  {
+    component: CNavItem,
+    name: 'Pais',
+    to: '/paises/listar',
+    icon: <CIcon icon={cilGlobeAlt} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavTitle,
     name: 'Theme',
   },
   {
     component: CNavItem,
     name: 'Colors',
     to: '/theme/colors',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilGlobeAlt} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
