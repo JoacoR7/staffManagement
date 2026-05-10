@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {
   CButton,
   CCard,
@@ -15,107 +15,86 @@ import {
   CTableHeaderCell,
   CTableRow,
 } from '@coreui/react'
+
 import CIcon from '@coreui/icons-react'
-import { cilOptions, cilTrash, cilPencil, cilSearch } from '@coreui/icons'
+import {
+  cilOptions,
+  cilTrash,
+  cilPencil,
+  cilSearch,
+} from '@coreui/icons'
 
-const Tables = () => {
-
-  const [paises, setPaises] = useState([])
-
-  useEffect(() => {
-    fetch('http://localhost:9000/api/v1/pais')
-      .then((response) => response.json())
-      .then((data) => setPaises(data))
-      .catch((error) => console.error('Error al cargar países:', error))
-  }, [])
-
+const PaisTable = ({ paises, onAgregar }) => {
   return (
     <CCard className="mb-4 shadow-sm">
-
       <CCardHeader className="d-flex justify-content-between align-items-center">
         <h4 className="mb-0">Lista de Países</h4>
-        <CButton color="primary">Agregar</CButton>
+
+        <CButton color="primary" onClick={onAgregar}>
+          Agregar
+        </CButton>
       </CCardHeader>
 
       <CCardBody>
         <CTable striped hover responsive={false}>
-
           <CTableHead>
             <CTableRow>
               <CTableHeaderCell
                 className="text-center"
                 style={{ width: '120px' }}
-                scope="col"
               >
                 Acciones
               </CTableHeaderCell>
 
-              <CTableHeaderCell scope="col">
+              <CTableHeaderCell>
                 Nombre
               </CTableHeaderCell>
             </CTableRow>
           </CTableHead>
 
           <CTableBody>
-
             {paises.map((pais) => (
               <CTableRow key={pais.id}>
-
                 <CTableDataCell className="text-center">
                   <CDropdown>
-
                     <CDropdownToggle
                       color="primary"
                       variant="outline"
                       size="sm"
-                      caret={true}
+                      caret
                     >
                       <CIcon icon={cilOptions} />
                     </CDropdownToggle>
 
                     <CDropdownMenu>
-
-                      <CDropdownItem
-                        onClick={() => console.log('Consultar', pais.id)}
-                      >
+                      <CDropdownItem>
                         <CIcon icon={cilSearch} className="me-2" />
                         Consultar
                       </CDropdownItem>
 
-                      <CDropdownItem
-                        onClick={() => console.log('Modificar', pais.id)}
-                      >
+                      <CDropdownItem>
                         <CIcon icon={cilPencil} className="me-2" />
                         Modificar
                       </CDropdownItem>
 
-                      <CDropdownItem
-                        className="text-danger"
-                        onClick={() => console.log('Borrar', pais.id)}
-                      >
+                      <CDropdownItem className="text-danger">
                         <CIcon icon={cilTrash} className="me-2" />
                         Borrar
                       </CDropdownItem>
-
                     </CDropdownMenu>
-
                   </CDropdown>
                 </CTableDataCell>
 
                 <CTableDataCell>
                   {pais.nombre}
                 </CTableDataCell>
-
               </CTableRow>
             ))}
-
           </CTableBody>
-
         </CTable>
       </CCardBody>
-
     </CCard>
   )
 }
 
-export default Tables
+export default PaisTable
