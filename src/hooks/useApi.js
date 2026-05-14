@@ -15,11 +15,18 @@ export function useApi() {
     });
 
     if (res.status === 401) {
-      logout(); // token expirado, manda al login
+      logout();
       return;
     }
 
-    if (!res.ok) throw new Error(`Error ${res.status}`);
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({})); 
+      const error = new Error(errorData.error || `Error ${res.status}`);
+      error.status = res.status;
+      error.data = errorData; // Guardamos el JSON del backend 
+      throw error; 
+    }
+
     return res;
   };
 
