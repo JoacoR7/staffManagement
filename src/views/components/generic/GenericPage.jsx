@@ -146,11 +146,23 @@ const GenericPage = ({
     try {
       const url = modo === 'crear' ? apiBase : `${apiBase}/${seleccionado.id}`
       const metodo = modo === 'crear' ? 'POST' : 'PUT'
+
+      const payloadTransformado = { ...payload }
+
+      fields.forEach((field) => {
+        if (field.type === 'select' && payload[field.key]) {
+          payloadTransformado[field.key] = {
+            id: payload[field.key],
+          }
+        }
+      })
+
       await apiFetch(url, {
         method: metodo,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payloadTransformado),
       })
+
       volverALista()
       cargarDatos(paginaActual)
     } catch (error) {

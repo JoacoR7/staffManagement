@@ -72,8 +72,13 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 // Paises
 const PaisesPage = React.lazy(() => import('./views/pages/paises/PaisesPage'))
 
+
+// Sección artículos
+//Artículos
+const ArticulosPage = React.lazy(() => import('./views/pages/articulos/ArticulosPage'))
 // Unidades de medida
 const UnidadesDeMedidaPage = React.lazy(() => import('./views/pages/unidadesMedida/UnidadesDeMedidaPage'))
+
 
 /**
  * Array of route configuration objects
@@ -141,7 +146,8 @@ export const routes = [
   { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
   { path: '/widgets', name: 'Widgets', element: Widgets },
   { path: '/paises/listar', name: 'Paises', element: PaisesPage },
-  { path: '/unidades-medida/listar', name: 'Unidades de Medida', element: UnidadesDeMedidaPage }
+  { path: '/unidades-medida/listar', name: 'Unidades de Medida', element: UnidadesDeMedidaPage },
+  { path: '/articulos/listar', name: 'Artículos', element: ArticulosPage }
 ]
 
 export default routes

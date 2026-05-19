@@ -47,6 +47,9 @@ const GenericTable = ({
   totalPaginas,
   onCambiarPagina,
 }) => {
+  const getValue = (obj, path) => {
+    return path.split('.').reduce((acc, part) => acc?.[part], obj)
+  }
   return (
     <CCard className="mb-4 shadow-sm">
       <CCardHeader className="d-flex justify-content-between align-items-center">
@@ -94,9 +97,11 @@ const GenericTable = ({
                   </CDropdown>
                 </CTableDataCell>
 
-                {columns.map((col) => (
+               {columns.map((col) => (
                   <CTableDataCell key={col.key}>
-                    {col.render ? col.render(item[col.key], item) : item[col.key]}
+                    {col.render
+                      ? col.render(getValue(item, col.key), item)
+                      : String(getValue(item, col.key) ?? '')}
                   </CTableDataCell>
                 ))}
               </CTableRow>

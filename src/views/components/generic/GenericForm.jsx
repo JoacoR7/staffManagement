@@ -43,9 +43,18 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
     const initial = {}
     fields.forEach((field) => {
       if (entity && entity[field.key] !== undefined) {
-        initial[field.key] = entity[field.key]
+        if (
+          field.type === 'select' &&
+          entity[field.key] &&
+          typeof entity[field.key] === 'object'
+        ) {
+          initial[field.key] = entity[field.key].id
+        } else {
+          initial[field.key] = entity[field.key]
+        }
       } else {
-        initial[field.key] = field.defaultValue ?? (field.type === 'checkbox' ? false : '')
+        initial[field.key] =
+          field.defaultValue ?? (field.type === 'checkbox' ? false : '')
       }
     })
     // Preservar campos ocultos necesarios para el backend (id, eliminado, etc.)
@@ -125,11 +134,28 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
       <CCardBody>
         {fields.map((field) => (
           <div className="mb-3" key={field.key}>
-            <CFormLabel>
-              {field.label}
-              {field.required && <span className="text-danger ms-1">*</span>}
-            </CFormLabel>
-            {renderField(field)}
+            {field.type === 'checkbox' ? (
+              <CFormCheck
+                label={
+                  <>
+                    {field.label}
+                    {field.required && <span className="text-danger ms-1">*</span>}
+                  </>
+                }
+                checked={!!formData[field.key]}
+                disabled={soloLectura}
+                onChange={(e) => handleChange(field.key, e.target.checked)}
+              />
+            ) : (
+              <>
+                <CFormLabel>
+                  {field.label}
+                  {field.required && <span className="text-danger ms-1">*</span>}
+                </CFormLabel>
+
+                {renderField(field)}
+              </>
+            )}
           </div>
         ))}
       </CCardBody>

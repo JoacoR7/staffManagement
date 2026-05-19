@@ -102,6 +102,11 @@ const _nav = [
     items: [
       {
         component: CNavItem,
+        name: 'Artículos',
+        to: '/articulos/listar',
+      },
+      {
+        component: CNavItem,
         name: 'Unidades de medida',
         to: '/unidades-medida/listar',
       },
