@@ -26,8 +26,8 @@ import {
   cilSearch,
 } from '@coreui/icons'
 
-const PaisTable = ({
-  paises,
+const UnidadMedidaTable = ({
+  unidadesDeMedida,
   onAgregar,
   onEditar,
   onConsultar,
@@ -39,7 +39,7 @@ const PaisTable = ({
   return (
     <CCard className="mb-4 shadow-sm">
       <CCardHeader className="d-flex justify-content-between align-items-center">
-        <h4 className="mb-0">Lista de Países</h4>
+        <h4 className="mb-0">Lista de unidades de medidas</h4>
 
         <CButton color="primary" onClick={onAgregar}>
           Agregar
@@ -61,8 +61,8 @@ const PaisTable = ({
           </CTableHead>
 
           <CTableBody>
-            {paises.map((pais) => (
-              <CTableRow key={pais.id}>
+            {unidadesDeMedida.map((unidad) => (
+              <CTableRow key={unidad.id}>
                 <CTableDataCell className="text-center">
                   <CDropdown>
                     <CDropdownToggle
@@ -74,19 +74,19 @@ const PaisTable = ({
                     </CDropdownToggle>
 
                     <CDropdownMenu>
-                      <CDropdownItem onClick={() => onConsultar(pais)}>
+                      <CDropdownItem onClick={() => onConsultar(unidad)}>
                         <CIcon icon={cilSearch} className="me-2" />
                         Consultar
                       </CDropdownItem>
 
-                      <CDropdownItem onClick={() => onEditar(pais)}>
+                      <CDropdownItem onClick={() => onEditar(unidad)}>
                         <CIcon icon={cilPencil} className="me-2" />
                         Modificar
                       </CDropdownItem>
 
                       <CDropdownItem
                         className="text-danger"
-                        onClick={() => onBorrar(pais)}
+                        onClick={() => onBorrar(unidad)}
                       >
                         <CIcon icon={cilTrash} className="me-2" />
                         Borrar
@@ -96,7 +96,7 @@ const PaisTable = ({
                 </CTableDataCell>
 
                 <CTableDataCell>
-                  {pais.nombre}
+                  {unidad.nombre}
                 </CTableDataCell>
               </CTableRow>
             ))}
@@ -138,4 +138,4 @@ const PaisTable = ({
   )
 }
 
-export default PaisTable
+export default UnidadMedidaTable

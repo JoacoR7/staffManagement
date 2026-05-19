@@ -9,21 +9,21 @@ import {
   CFormLabel,
 } from '@coreui/react'
 
-const PaisForm = ({ modo, pais, onClose, onGuardar }) => {
+const UnidadDeMedidaForm = ({ modo, unidadDeMedida, onClose, onGuardar }) => {
   const [id, setId] = useState(null)
   const [nombre, setNombre] = useState('')
   const [eliminado, setEliminado] = useState(false)
 
   useEffect(() => {
-    setId(pais?.id || null)
-    setNombre(pais?.nombre || '')
-    setEliminado(pais?.eliminado || false)
-  }, [pais])
+    setId(unidadDeMedida?.id || null)
+    setNombre(unidadDeMedida?.nombre || '')
+    setEliminado(unidadDeMedida?.eliminado || false)
+  }, [unidadDeMedida])
 
   const titulos = {
-    crear: 'Nuevo País',
-    editar: 'Modificar País',
-    ver: 'Detalle del País',
+    crear: 'Nueva Unidad de Medida',
+    editar: 'Modificar Unidad de Medida',
+    ver: 'Detalle de la Unidad de Medida',
   }
 
   const soloLectura = modo === 'ver'
@@ -36,10 +36,10 @@ const PaisForm = ({ modo, pais, onClose, onGuardar }) => {
 
       <CCardBody>
         <div className="mb-3">
-          <CFormLabel>Nombre del País</CFormLabel>
+          <CFormLabel>Nombre de la Unidad de Medida</CFormLabel>
           <CFormInput
             type="text"
-            placeholder="Ej: Argentina"
+            placeholder="Ej: Kilogramo"
             value={nombre}
             disabled={soloLectura}
             onChange={(e) => setNombre(e.target.value)}
@@ -62,4 +62,4 @@ const PaisForm = ({ modo, pais, onClose, onGuardar }) => {
   )
 }
 
-export default PaisForm
+export default UnidadDeMedidaForm
