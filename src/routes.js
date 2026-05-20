@@ -70,15 +70,15 @@ const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 // Paises
-const PaisesPage = React.lazy(() => import('./views/pages/paises/PaisesPage'))
-
+const PaisPage = React.lazy(() => import('./views/pages/paises/PaisPage'))
 
 // Sección artículos
 //Artículos
 const ArticulosPage = React.lazy(() => import('./views/pages/articulos/ArticulosPage'))
 // Unidades de medida
-const UnidadesDeMedidaPage = React.lazy(() => import('./views/pages/unidadesMedida/UnidadesDeMedidaPage'))
-
+const UnidadesDeMedidaPage = React.lazy(
+  () => import('./views/pages/unidadesMedida/UnidadesDeMedidaPage'),
+)
 
 /**
  * Array of route configuration objects
@@ -145,9 +145,9 @@ export const routes = [
   { path: '/notifications/modals', name: 'Modals', element: Modals },
   { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
   { path: '/widgets', name: 'Widgets', element: Widgets },
-  { path: '/paises/listar', name: 'Paises', element: PaisesPage },
+  { path: '/paises/listar', name: 'Paises', element: PaisPage },
   { path: '/unidades-medida/listar', name: 'Unidades de Medida', element: UnidadesDeMedidaPage },
-  { path: '/articulos/listar', name: 'Artículos', element: ArticulosPage }
+  { path: '/articulos/listar', name: 'Artículos', element: ArticulosPage },
 ]
 
 export default routes
