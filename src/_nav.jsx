@@ -26,7 +26,7 @@ import {
   cilPuzzle,
   cilSpeedometer,
   cilStar,
-  cilBasket
+  cilBasket,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -83,7 +83,7 @@ const _nav = [
     to: '/dashboard',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
   },
-    {
+  {
     component: CNavGroup,
     name: 'Direcciones',
     icon: <CIcon icon={cilGlobeAlt} customClassName="nav-icon" />,
@@ -91,8 +91,8 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Pais',
-        to: '/paises/listar'
-      }
+        to: '/paises/listar',
+      },
     ],
   },
   {
@@ -109,6 +109,11 @@ const _nav = [
         component: CNavItem,
         name: 'Unidades de medida',
         to: '/unidades-medida/listar',
+      },
+      {
+        component: CNavItem,
+        name: 'Promociones',
+        to: '/promociones/listar',
       },
       {
         component: CNavItem,
