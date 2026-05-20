@@ -43,18 +43,13 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
     const initial = {}
     fields.forEach((field) => {
       if (entity && entity[field.key] !== undefined) {
-        if (
-          field.type === 'select' &&
-          entity[field.key] &&
-          typeof entity[field.key] === 'object'
-        ) {
+        if (field.type === 'select' && entity[field.key] && typeof entity[field.key] === 'object') {
           initial[field.key] = entity[field.key].id
         } else {
           initial[field.key] = entity[field.key]
         }
       } else {
-        initial[field.key] =
-          field.defaultValue ?? (field.type === 'checkbox' ? false : '')
+        initial[field.key] = field.defaultValue ?? (field.type === 'checkbox' ? false : '')
       }
     })
     // Preservar campos ocultos necesarios para el backend (id, eliminado, etc.)
@@ -119,6 +114,9 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
             type={field.type || 'text'}
             placeholder={field.placeholder || ''}
             value={value}
+            min={field.min}
+            max={field.max}
+            step={field.step}
             onChange={(e) => handleChange(field.key, e.target.value)}
           />
         )
