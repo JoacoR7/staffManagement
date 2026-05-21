@@ -60,14 +60,21 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
 
   const soloLectura = modo === 'ver'
 
-  const handleChange = (key, value) => {
-    setFormData((prev) => ({ ...prev, [key]: value }))
+  const handleChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field.key]: value,
+    }))
+
+    if (field.onChangeExtra) {
+      field.onChangeExtra(value)
+    }
   }
 
   const renderField = (field) => {
     const value = formData[field.key] ?? ''
     const commonProps = {
-      disabled: soloLectura,
+      disabled: soloLectura || field.disabled,
     }
 
     switch (field.type) {
@@ -76,7 +83,7 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
           <CFormSelect
             {...commonProps}
             value={value}
-            onChange={(e) => handleChange(field.key, e.target.value)}
+            onChange={(e) => handleChange(field, e.target.value)}
           >
             <option value="">-- Seleccionar --</option>
             {(field.options || []).map((opt) => (
@@ -94,7 +101,7 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
             placeholder={field.placeholder || ''}
             value={value}
             rows={3}
-            onChange={(e) => handleChange(field.key, e.target.value)}
+            onChange={(e) => handleChange(field, e.target.value)}
           />
         )
 
@@ -103,7 +110,7 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
           <CFormCheck
             {...commonProps}
             checked={!!value}
-            onChange={(e) => handleChange(field.key, e.target.checked)}
+            onChange={(e) => handleChange(field, e.target.checked)}
           />
         )
 
@@ -117,7 +124,7 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
             min={field.min}
             max={field.max}
             step={field.step}
-            onChange={(e) => handleChange(field.key, e.target.value)}
+            onChange={(e) => handleChange(field, e.target.value)}
           />
         )
     }
@@ -142,7 +149,7 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
                 }
                 checked={!!formData[field.key]}
                 disabled={soloLectura}
-                onChange={(e) => handleChange(field.key, e.target.checked)}
+                onChange={(e) => handleChange(field, e.target.checked)}
               />
             ) : (
               <>
