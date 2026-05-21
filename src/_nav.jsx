@@ -98,6 +98,11 @@ const _nav = [
         name: 'Provincia',
         to: '/provincias/listar',
       },
+      {
+        component: CNavItem,
+        name: 'Departamento',
+        to: '/departamentos/listar',
+      },
     ],
   },
   {
