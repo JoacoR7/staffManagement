@@ -41,6 +41,7 @@ import { useApi } from '@/hooks/useApi'
  */
 const GenericPage = ({
   apiBase,
+  apiCrear,
   tituloLista,
   titulos,
   columns,
@@ -48,6 +49,13 @@ const GenericPage = ({
   deleteMessage,
   deleteButtonText = 'Eliminar',
   tamanioPagina = 20,
+  multipart = false,
+  multipartDataPart = 'data',
+  permitirCrear = true,
+  permitirEditar = true,
+  permitirVer = true,
+  permitirBorrar = true,
+  accionesExtra = [],
 }) => {
   const { apiFetch } = useApi()
 
@@ -140,34 +148,61 @@ const GenericPage = ({
     }
   }
 
+  // ── Acciones extra ───────────────────────────────────────────────────────────
+
+  const accionesExtraWrapped = accionesExtra.map((accion) => ({
+    ...accion,
+    onClick: async (item) => {
+      try {
+        await accion.onClick(item)
+        cargarDatos(paginaActual)
+      } catch (error) {
+        manejarError(error.message)
+      }
+    },
+  }))
+
   // ── Guardar ──────────────────────────────────────────────────────────────────
 
   const guardar = async (payload) => {
     try {
-      const url = modo === 'crear' ? apiBase : `${apiBase}/${seleccionado.id}`
+      const url = modo === 'crear' ? (apiCrear || apiBase) : `${apiBase}/${seleccionado.id}`
       const metodo = modo === 'crear' ? 'POST' : 'PUT'
 
       const payloadTransformado = { ...payload }
 
       fields.forEach((field) => {
-        if (field.type === 'select') {
+        if (field.type === 'select' && !field.rawValue) {
           const value = payload[field.key]
-
           if (value !== '' && value !== null && value !== undefined) {
-            payloadTransformado[field.key] = {
-              id: value,
-            }
+            payloadTransformado[field.key] = { id: value }
           } else {
             payloadTransformado[field.key] = null
           }
         }
       })
 
-      await apiFetch(url, {
-        method: metodo,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payloadTransformado),
-      })
+      if (multipart) {
+        const formData = new FormData()
+        fields.filter((f) => f.type === 'file').forEach((field) => {
+          if (payloadTransformado[field.key] instanceof File) {
+            formData.append(field.key, payloadTransformado[field.key])
+          }
+          delete payloadTransformado[field.key]
+        })
+        Object.entries(payloadTransformado).forEach(([key, value]) => {
+          if (value !== null && value !== undefined) {
+            formData.append(key, value)
+          }
+        })
+        await apiFetch(url, { method: metodo, body: formData })
+      } else {
+        await apiFetch(url, {
+          method: metodo,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payloadTransformado),
+        })
+      }
 
       volverALista()
       cargarDatos(paginaActual)
@@ -192,6 +227,11 @@ const GenericPage = ({
           paginaActual={paginaActual}
           totalPaginas={totalPaginas}
           onCambiarPagina={setPaginaActual}
+          permitirCrear={permitirCrear}
+          permitirEditar={permitirEditar}
+          permitirVer={permitirVer}
+          permitirBorrar={permitirBorrar}
+          accionesExtra={accionesExtraWrapped}
         />
       ) : (
         <GenericForm

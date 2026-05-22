@@ -133,6 +133,23 @@ const _nav = [
     ],
   },
   {
+    component: CNavGroup,
+    name: 'Empleados',
+    icon: <CIcon icon={cilBasket} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Empleados',
+        to: '/empleados/listar',
+      },
+      {
+        component: CNavItem,
+        name: 'Registro de horarios',
+        to: '/registroHorario/listar',
+      },
+    ],
+  },
+  {
     component: CNavTitle,
     name: 'Theme',
   },

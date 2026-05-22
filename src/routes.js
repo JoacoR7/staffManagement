@@ -80,6 +80,9 @@ const PromocionPage = React.lazy(() => import('./views/pages/promocion/Promocion
 // Sección artículos
 //Artículos
 const ArticulosPage = React.lazy(() => import('./views/pages/articulos/ArticulosPage'))
+
+const EmpleadoPage = React.lazy(() => import('./views/pages/empleado/EmpleadoPage'))
+const RegistroHorarioPage = React.lazy(() => import('./views/pages/registroHorario/RegistroHorario'))
 // Unidades de medida
 const UnidadesDeMedidaPage = React.lazy(
   () => import('./views/pages/unidadesMedida/UnidadesDeMedidaPage'),
@@ -156,6 +159,8 @@ export const routes = [
   { path: '/promociones/listar', name: 'Promocion', element: PromocionPage },
   { path: '/unidades-medida/listar', name: 'Unidades de Medida', element: UnidadesDeMedidaPage },
   { path: '/articulos/listar', name: 'Artículos', element: ArticulosPage },
+  { path: '/empleados/listar', name: 'Empleados', element: EmpleadoPage },
+  { path: '/registroHorario/listar', name: 'Registro Horario', element: RegistroHorarioPage },
 ]
 
 export default routes
