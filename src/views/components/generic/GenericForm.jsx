@@ -45,6 +45,10 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
       if (entity && entity[field.key] !== undefined) {
         if (field.type === 'select' && entity[field.key] && typeof entity[field.key] === 'object') {
           initial[field.key] = entity[field.key].id
+        } else if (field.type === 'datetime-local' && entity[field.key]) {
+          initial[field.key] = entity[field.key].slice(0, 16)
+        } else if (field.type === 'date' && entity[field.key]) {
+          initial[field.key] = entity[field.key].slice(0, 10)
         } else {
           initial[field.key] = entity[field.key]
         }
@@ -104,6 +108,19 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
             {...commonProps}
             checked={!!value}
             onChange={(e) => handleChange(field.key, e.target.checked)}
+          />
+        )
+
+      case 'file':
+        return soloLectura ? (
+          value ? (
+            <img src={value} alt="foto" style={{ maxWidth: '150px', borderRadius: '4px' }} />
+          ) : null
+        ) : (
+          <CFormInput
+            type="file"
+            accept="image/*"
+            onChange={(e) => handleChange(field.key, e.target.files[0] || null)}
           />
         )
 

@@ -46,7 +46,13 @@ const GenericTable = ({
   paginaActual,
   totalPaginas,
   onCambiarPagina,
+  permitirCrear = true,
+  permitirEditar = true,
+  permitirVer = true,
+  permitirBorrar = true,
+  accionesExtra = [],
 }) => {
+  const hayAcciones = permitirVer || permitirEditar || permitirBorrar || accionesExtra.length > 0
   const getValue = (obj, path) => {
     return path.split('.').reduce((acc, part) => acc?.[part], obj)
   }
@@ -54,18 +60,22 @@ const GenericTable = ({
     <CCard className="mb-4 shadow-sm">
       <CCardHeader className="d-flex justify-content-between align-items-center">
         <h4 className="mb-0">{titulo}</h4>
-        <CButton color="primary" onClick={onAgregar}>
-          Agregar
-        </CButton>
+        {permitirCrear && (
+          <CButton color="primary" onClick={onAgregar}>
+            Agregar
+          </CButton>
+        )}
       </CCardHeader>
 
       <CCardBody>
         <CTable striped hover responsive={false}>
           <CTableHead>
             <CTableRow>
-              <CTableHeaderCell style={{ width: '120px' }} className="text-center">
-                Acciones
-              </CTableHeaderCell>
+              {hayAcciones && (
+                <CTableHeaderCell style={{ width: '120px' }} className="text-center">
+                  Acciones
+                </CTableHeaderCell>
+              )}
               {columns.map((col) => (
                 <CTableHeaderCell key={col.key}>{col.label}</CTableHeaderCell>
               ))}
@@ -75,27 +85,47 @@ const GenericTable = ({
           <CTableBody>
             {items.map((item) => (
               <CTableRow key={item.id}>
-                <CTableDataCell className="text-center">
-                  <CDropdown>
-                    <CDropdownToggle color="primary" variant="outline" size="sm">
-                      <CIcon icon={cilOptions} />
-                    </CDropdownToggle>
-                    <CDropdownMenu>
-                      <CDropdownItem onClick={() => onConsultar(item)}>
-                        <CIcon icon={cilSearch} className="me-2" />
-                        Consultar
-                      </CDropdownItem>
-                      <CDropdownItem onClick={() => onEditar(item)}>
-                        <CIcon icon={cilPencil} className="me-2" />
-                        Modificar
-                      </CDropdownItem>
-                      <CDropdownItem className="text-danger" onClick={() => onBorrar(item)}>
-                        <CIcon icon={cilTrash} className="me-2" />
-                        Borrar
-                      </CDropdownItem>
-                    </CDropdownMenu>
-                  </CDropdown>
-                </CTableDataCell>
+                {hayAcciones && (
+                  <CTableDataCell className="text-center">
+                    <CDropdown>
+                      <CDropdownToggle color="primary" variant="outline" size="sm">
+                        <CIcon icon={cilOptions} />
+                      </CDropdownToggle>
+                      <CDropdownMenu>
+                        {permitirVer && (
+                          <CDropdownItem onClick={() => onConsultar(item)}>
+                            <CIcon icon={cilSearch} className="me-2" />
+                            Consultar
+                          </CDropdownItem>
+                        )}
+                        {permitirEditar && (
+                          <CDropdownItem onClick={() => onEditar(item)}>
+                            <CIcon icon={cilPencil} className="me-2" />
+                            Modificar
+                          </CDropdownItem>
+                        )}
+                        {permitirBorrar && (
+                          <CDropdownItem className="text-danger" onClick={() => onBorrar(item)}>
+                            <CIcon icon={cilTrash} className="me-2" />
+                            Borrar
+                          </CDropdownItem>
+                        )}
+                        {accionesExtra
+                          .filter((accion) => !accion.condition || accion.condition(item))
+                          .map((accion, i) => (
+                            <CDropdownItem
+                              key={i}
+                              className={accion.className}
+                              onClick={() => accion.onClick(item)}
+                            >
+                              {accion.icon && <CIcon icon={accion.icon} className="me-2" />}
+                              {accion.label}
+                            </CDropdownItem>
+                          ))}
+                      </CDropdownMenu>
+                    </CDropdown>
+                  </CTableDataCell>
+                )}
 
                {columns.map((col) => (
                   <CTableDataCell key={col.key}>

@@ -5,10 +5,11 @@ export function useApi() {
   const { token, logout } = useAuth();
 
   const apiFetch = async (url, options = {}) => {
+    const isFormData = options.body instanceof FormData
     const res = await fetch(url, {
       ...options,
       headers: {
-        "Content-Type": "application/json",
+        ...(isFormData ? {} : { "Content-Type": "application/json" }),
         Authorization: `Bearer ${token}`,
         ...options.headers,
       },
