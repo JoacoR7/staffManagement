@@ -172,9 +172,12 @@ const GenericPage = ({
       const payloadTransformado = { ...payload }
 
       fields.forEach((field) => {
-        if (field.type === 'select' && payload[field.key] && !field.rawValue) {
-          payloadTransformado[field.key] = {
-            id: payload[field.key],
+        if (field.type === 'select' && !field.rawValue) {
+          const value = payload[field.key]
+          if (value !== '' && value !== null && value !== undefined) {
+            payloadTransformado[field.key] = { id: value }
+          } else {
+            payloadTransformado[field.key] = null
           }
         }
       })

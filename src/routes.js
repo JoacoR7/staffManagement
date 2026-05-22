@@ -71,6 +71,8 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 // Paises
 const PaisPage = React.lazy(() => import('./views/pages/paises/PaisPage'))
+const ProvinciaPage = React.lazy(() => import('./views/pages/provincias/ProvinciaPage'))
+const DepartamentoPage = React.lazy(() => import('./views/pages/departamentos/DepartamentoPage'))
 
 // Promocion
 const PromocionPage = React.lazy(() => import('./views/pages/promocion/PromocionPage'))
@@ -152,6 +154,8 @@ export const routes = [
   { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
   { path: '/widgets', name: 'Widgets', element: Widgets },
   { path: '/paises/listar', name: 'Paises', element: PaisPage },
+  { path: '/provincias/listar', name: 'Provincias', element: ProvinciaPage },
+  { path: '/departamentos/listar', name: 'Departamento', element: DepartamentoPage },
   { path: '/promociones/listar', name: 'Promocion', element: PromocionPage },
   { path: '/unidades-medida/listar', name: 'Unidades de Medida', element: UnidadesDeMedidaPage },
   { path: '/articulos/listar', name: 'Artículos', element: ArticulosPage },
