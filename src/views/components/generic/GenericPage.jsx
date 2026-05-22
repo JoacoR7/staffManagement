@@ -166,7 +166,7 @@ const GenericPage = ({
 
   const guardar = async (payload) => {
     try {
-      const url = modo === 'crear' ? (apiCrear || apiBase) : `${apiBase}/${seleccionado.id}`
+      const url = modo === 'crear' ? apiCrear || apiBase : `${apiBase}/${seleccionado.id}`
       const metodo = modo === 'crear' ? 'POST' : 'PUT'
 
       const payloadTransformado = { ...payload }
@@ -184,12 +184,14 @@ const GenericPage = ({
 
       if (multipart) {
         const formData = new FormData()
-        fields.filter((f) => f.type === 'file').forEach((field) => {
-          if (payloadTransformado[field.key] instanceof File) {
-            formData.append(field.key, payloadTransformado[field.key])
-          }
-          delete payloadTransformado[field.key]
-        })
+        fields
+          .filter((f) => f.type === 'file')
+          .forEach((field) => {
+            if (payloadTransformado[field.key] instanceof File) {
+              formData.append(field.key, payloadTransformado[field.key])
+            }
+            delete payloadTransformado[field.key]
+          })
         Object.entries(payloadTransformado).forEach(([key, value]) => {
           if (value !== null && value !== undefined) {
             formData.append(key, value)

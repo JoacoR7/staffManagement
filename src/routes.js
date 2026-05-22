@@ -82,7 +82,9 @@ const PromocionPage = React.lazy(() => import('./views/pages/promocion/Promocion
 const ArticulosPage = React.lazy(() => import('./views/pages/articulos/ArticulosPage'))
 
 const EmpleadoPage = React.lazy(() => import('./views/pages/empleado/EmpleadoPage'))
-const RegistroHorarioPage = React.lazy(() => import('./views/pages/registroHorario/RegistroHorario'))
+const RegistroHorarioPage = React.lazy(
+  () => import('./views/pages/registroHorario/RegistroHorario'),
+)
 // Unidades de medida
 const UnidadesDeMedidaPage = React.lazy(
   () => import('./views/pages/unidadesMedida/UnidadesDeMedidaPage'),
