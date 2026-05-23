@@ -42,6 +42,7 @@ import { useApi } from '@/hooks/useApi'
 const GenericPage = ({
   apiBase,
   apiCrear,
+  cargarDetalle,
   tituloLista,
   titulos,
   columns,
@@ -106,16 +107,26 @@ const GenericPage = ({
     setMostrarFormulario(true)
   }
 
-  const abrirEditar = (item) => {
-    setModo('editar')
-    setSeleccionado(item)
-    setMostrarFormulario(true)
+  const abrirEditar = async (item) => {
+    try {
+      const detalle = cargarDetalle ? await cargarDetalle(item) : item
+      setModo('editar')
+      setSeleccionado(detalle)
+      setMostrarFormulario(true)
+    } catch (error) {
+      manejarError(error.message)
+    }
   }
 
-  const abrirVer = (item) => {
-    setModo('ver')
-    setSeleccionado(item)
-    setMostrarFormulario(true)
+  const abrirVer = async (item) => {
+    try {
+      const detalle = cargarDetalle ? await cargarDetalle(item) : item
+      setModo('ver')
+      setSeleccionado(detalle)
+      setMostrarFormulario(true)
+    } catch (error) {
+      manejarError(error.message)
+    }
   }
 
   const volverALista = () => {
@@ -166,7 +177,7 @@ const GenericPage = ({
 
   const guardar = async (payload) => {
     try {
-      const url = modo === 'crear' ? (apiCrear || apiBase) : `${apiBase}/${seleccionado.id}`
+      const url = modo === 'crear' ? apiCrear || apiBase : `${apiBase}/${seleccionado.id}`
       const metodo = modo === 'crear' ? 'POST' : 'PUT'
 
       const payloadTransformado = { ...payload }
@@ -184,12 +195,14 @@ const GenericPage = ({
 
       if (multipart) {
         const formData = new FormData()
-        fields.filter((f) => f.type === 'file').forEach((field) => {
-          if (payloadTransformado[field.key] instanceof File) {
-            formData.append(field.key, payloadTransformado[field.key])
-          }
-          delete payloadTransformado[field.key]
-        })
+        fields
+          .filter((f) => f.type === 'file')
+          .forEach((field) => {
+            if (payloadTransformado[field.key] instanceof File) {
+              formData.append(field.key, payloadTransformado[field.key])
+            }
+            delete payloadTransformado[field.key]
+          })
         Object.entries(payloadTransformado).forEach(([key, value]) => {
           if (value !== null && value !== undefined) {
             formData.append(key, value)
