@@ -38,8 +38,11 @@ const EmpleadoPage = () => {
         { key: 'tipoDocumentacion', label: 'Tipo doc.' },
         { key: 'dni', label: 'DNI' },
         { key: 'tipoEmpleado', label: 'Tipo empleado' },
-        { key: 'email', label: 'Email' },
-        { key: 'rol', label: 'Rol' },
+        {
+          key: 'email',
+          label: 'Email',
+          render: (_, item) => item.contacto?.find((c) => c.email)?.email ?? '-',
+        },
       ]}
       fields={[
         { key: 'nombre', label: 'Nombre', required: true },
@@ -71,7 +74,32 @@ const EmpleadoPage = () => {
             { value: 'COCINERO', label: 'Cocinero' },
           ],
         },
+        {
+          key: 'tipoContacto',
+          label: 'Tipo de contacto',
+          type: 'select',
+          rawValue: true,
+          required: true,
+          options: [
+            { value: 'PERSONAL', label: 'Personal' },
+            { value: 'LABORAL', label: 'Laboral' },
+            { value: 'EMPRESA', label: 'Empresa' },
+          ],
+        },
         { key: 'email', label: 'Email', type: 'email', required: true },
+        {
+          key: 'tipoTelefono',
+          label: 'Tipo de teléfono',
+          type: 'select',
+          rawValue: true,
+          required: true,
+          options: [
+            { value: 'FIJO', label: 'Fijo' },
+            { value: 'CELULAR', label: 'Celular' },
+          ],
+        },
+        { key: 'contactoTelefono', label: 'Teléfono', required: true },
+        { key: 'observacion', label: 'Observación', type: 'textarea' },
         { key: 'password', label: 'Contraseña', type: 'password', required: true },
         {
           key: 'rol',
