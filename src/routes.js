@@ -90,6 +90,7 @@ const RegistroHorarioPage = React.lazy(
 const UnidadesDeMedidaPage = React.lazy(
   () => import('./views/pages/unidadesMedida/UnidadesDeMedidaPage'),
 )
+const StockPage = React.lazy(() => import('./views/pages/stock/StockPage'))
 
 /**
  * Array of route configuration objects
@@ -165,6 +166,7 @@ export const routes = [
   { path: '/articulos/listar', name: 'Artículos', element: ArticulosPage },
   { path: '/empleados/listar', name: 'Empleados', element: EmpleadoPage },
   { path: '/registroHorario/listar', name: 'Registro Horario', element: RegistroHorarioPage },
+  { path: '/stock/listar', name: 'Stock', element: StockPage },
 ]
 
 export default routes
