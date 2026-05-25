@@ -42,6 +42,7 @@ import { useApi } from '@/hooks/useApi'
 const GenericPage = ({
   apiBase,
   apiCrear,
+  cargarDetalle,
   tituloLista,
   titulos,
   columns,
@@ -106,16 +107,26 @@ const GenericPage = ({
     setMostrarFormulario(true)
   }
 
-  const abrirEditar = (item) => {
-    setModo('editar')
-    setSeleccionado(item)
-    setMostrarFormulario(true)
+  const abrirEditar = async (item) => {
+    try {
+      const detalle = cargarDetalle ? await cargarDetalle(item) : item
+      setModo('editar')
+      setSeleccionado(detalle)
+      setMostrarFormulario(true)
+    } catch (error) {
+      manejarError(error.message)
+    }
   }
 
-  const abrirVer = (item) => {
-    setModo('ver')
-    setSeleccionado(item)
-    setMostrarFormulario(true)
+  const abrirVer = async (item) => {
+    try {
+      const detalle = cargarDetalle ? await cargarDetalle(item) : item
+      setModo('ver')
+      setSeleccionado(detalle)
+      setMostrarFormulario(true)
+    } catch (error) {
+      manejarError(error.message)
+    }
   }
 
   const volverALista = () => {

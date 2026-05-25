@@ -4,14 +4,14 @@ import { useApi } from '@/hooks/useApi'
 
 const EmpleadoPage = () => {
   const { apiFetch } = useApi()
-  const [localidades, setLocalidades] = useState([])
+  const [direcciones, setDirecciones] = useState([])
 
   useEffect(() => {
-    apiFetch('http://localhost:9000/api/v1/localidad')
+    apiFetch('http://localhost:9000/api/v1/direcciones')
       .then((res) => res.json())
       .then((data) => {
         const lista = Array.isArray(data) ? data : data.content || []
-        setLocalidades(lista.map((l) => ({ value: l.id, label: l.nombre })))
+        setDirecciones(lista.map((l) => ({ value: l.id, label: l.nombre })))
       })
       .catch(() => {})
   }, [])
@@ -20,6 +20,11 @@ const EmpleadoPage = () => {
     <GenericPage
       apiBase="http://localhost:9000/api/v1/empleado"
       apiCrear="http://localhost:9000/api/v1/empleado/crear"
+      cargarDetalle={async (item) => {
+        const res = await apiFetch(`http://localhost:9000/api/v1/empleado/${item.id}`)
+        const data = await res.json()
+        return { ...data, direccionId: data.direccion?.id }
+      }}
       multipart={true}
       tituloLista="Lista de empleados"
       titulos={{
@@ -33,8 +38,11 @@ const EmpleadoPage = () => {
         { key: 'tipoDocumentacion', label: 'Tipo doc.' },
         { key: 'dni', label: 'DNI' },
         { key: 'tipoEmpleado', label: 'Tipo empleado' },
-        { key: 'email', label: 'Email' },
-        { key: 'rol', label: 'Rol' },
+        {
+          key: 'email',
+          label: 'Email',
+          render: (_, item) => item.contacto?.find((c) => c.email)?.email ?? '-',
+        },
       ]}
       fields={[
         { key: 'nombre', label: 'Nombre', required: true },
@@ -52,6 +60,7 @@ const EmpleadoPage = () => {
         },
         { key: 'dni', label: 'DNI', required: true },
         { key: 'fechaNacimiento', label: 'Fecha de nacimiento', type: 'date', required: true },
+        { key: 'foto', label: 'Foto de perfil', type: 'file' },
         {
           key: 'tipoEmpleado',
           label: 'Tipo de empleado',
@@ -65,7 +74,32 @@ const EmpleadoPage = () => {
             { value: 'COCINERO', label: 'Cocinero' },
           ],
         },
+        {
+          key: 'tipoContacto',
+          label: 'Tipo de contacto',
+          type: 'select',
+          rawValue: true,
+          required: true,
+          options: [
+            { value: 'PERSONAL', label: 'Personal' },
+            { value: 'LABORAL', label: 'Laboral' },
+            { value: 'EMPRESA', label: 'Empresa' },
+          ],
+        },
         { key: 'email', label: 'Email', type: 'email', required: true },
+        {
+          key: 'tipoTelefono',
+          label: 'Tipo de teléfono',
+          type: 'select',
+          rawValue: true,
+          required: true,
+          options: [
+            { value: 'FIJO', label: 'Fijo' },
+            { value: 'CELULAR', label: 'Celular' },
+          ],
+        },
+        { key: 'contactoTelefono', label: 'Teléfono', required: true },
+        { key: 'observacion', label: 'Observación', type: 'textarea' },
         { key: 'password', label: 'Contraseña', type: 'password', required: true },
         {
           key: 'rol',
@@ -80,20 +114,13 @@ const EmpleadoPage = () => {
             { value: 'COCINERO', label: 'Cocinero' },
           ],
         },
-        { key: 'calle', label: 'Calle', required: true },
-        { key: 'numeracion', label: 'Numeración', required: true },
-        { key: 'barrio', label: 'Barrio' },
-        { key: 'manzanaPiso', label: 'Manzana / Piso' },
-        { key: 'casaDepartamento', label: 'Casa / Departamento' },
-        { key: 'referencia', label: 'Referencia', type: 'textarea' },
-        { key: 'foto', label: 'Foto de perfil', type: 'file' },
         {
-          key: 'localidadId',
-          label: 'Localidad',
+          key: 'direccionId',
+          label: 'Dirección',
           type: 'select',
           rawValue: true,
           required: true,
-          options: localidades,
+          options: direcciones,
         },
       ]}
       deleteMessage={(item) => (
