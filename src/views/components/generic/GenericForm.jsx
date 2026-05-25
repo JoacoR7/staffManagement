@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMeme } from 'react'
+import Select from 'react-select'
+
 import {
   CButton,
   CCard,
@@ -95,19 +97,48 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
     switch (field.type) {
       case 'select':
         return (
-          <CFormSelect
-            key={`${field.key}-${(field.options || []).length}`}
-            {...commonProps}
-            value={value}
-            onChange={(e) => handleChange(field, e.target.value)}
-          >
-            <option value="">-- Seleccionar --</option>
-            {(field.options || []).map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </CFormSelect>
+            <Select
+              options={field.options || []}
+              value={
+                (field.options || []).find(
+                  (o) => o.value === value
+                ) || null
+              }
+              onChange={(selected) =>
+                handleChange(field, selected?.value || '')
+              }
+              placeholder="-- Seleccionar --"
+              isClearable
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  backgroundColor: 'var(--cui-body-bg)',
+                  borderColor: 'var(--cui-border-color)',
+                  color: 'var(--cui-body-color)',
+                }),
+                menu: (base) => ({
+                  ...base,
+                  backgroundColor: 'var(--cui-body-bg)',
+                  color: 'var(--cui-body-color)',
+                }),
+                singleValue: (base) => ({
+                  ...base,
+                  color: 'var(--cui-body-color)',
+                }),
+                input: (base) => ({
+                  ...base,
+                  color: 'var(--cui-body-color)',
+                }),
+                option: (base, state) => ({
+                  ...base,
+                  backgroundColor: state.isFocused
+                    ? 'var(--cui-tertiary-bg)'
+                    : 'var(--cui-body-bg)',
+                  color: 'var(--cui-body-color)',
+                  cursor: 'pointer',
+                }),
+              }}
+            />
         )
 
       case 'textarea':
