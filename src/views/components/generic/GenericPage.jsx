@@ -43,6 +43,7 @@ const GenericPage = ({
   apiBase,
   apiCrear,
   cargarDetalle,
+  transformEntity,
   tituloLista,
   titulos,
   columns,
@@ -109,7 +110,12 @@ const GenericPage = ({
 
   const abrirEditar = async (item) => {
     try {
-      const detalle = cargarDetalle ? await cargarDetalle(item) : item
+      let detalle = cargarDetalle ? await cargarDetalle(item) : item
+
+      if (transformEntity) {
+        detalle = await transformEntity(detalle)
+      }
+
       setModo('editar')
       setSeleccionado(detalle)
       setMostrarFormulario(true)
@@ -120,7 +126,12 @@ const GenericPage = ({
 
   const abrirVer = async (item) => {
     try {
-      const detalle = cargarDetalle ? await cargarDetalle(item) : item
+      let detalle = cargarDetalle ? await cargarDetalle(item) : item
+
+      if (transformEntity) {
+        detalle = await transformEntity(detalle)
+      }
+
       setModo('ver')
       setSeleccionado(detalle)
       setMostrarFormulario(true)

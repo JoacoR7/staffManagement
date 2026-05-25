@@ -61,6 +61,7 @@ const DepartamentoPage = () => {
       label: 'País',
       type: 'select',
       options: paises,
+      initialValue: (entity) => entity?.provincia?.pais?.id || '',
       onChangeExtra: (value) => {
         cargarProvincias(value)
       },

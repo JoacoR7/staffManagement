@@ -73,6 +73,7 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 const PaisPage = React.lazy(() => import('./views/pages/paises/PaisPage'))
 const ProvinciaPage = React.lazy(() => import('./views/pages/provincias/ProvinciaPage'))
 const DepartamentoPage = React.lazy(() => import('./views/pages/departamentos/DepartamentoPage'))
+const LocalidadPage = React.lazy(() => import('./views/pages/localidades/LocalidadPage'))
 
 // Promocion
 const PromocionPage = React.lazy(() => import('./views/pages/promocion/PromocionPage'))
@@ -82,7 +83,9 @@ const PromocionPage = React.lazy(() => import('./views/pages/promocion/Promocion
 const ArticulosPage = React.lazy(() => import('./views/pages/articulos/ArticulosPage'))
 
 const EmpleadoPage = React.lazy(() => import('./views/pages/empleado/EmpleadoPage'))
-const RegistroHorarioPage = React.lazy(() => import('./views/pages/registroHorario/RegistroHorario'))
+const RegistroHorarioPage = React.lazy(
+  () => import('./views/pages/registroHorario/RegistroHorario'),
+)
 // Unidades de medida
 const UnidadesDeMedidaPage = React.lazy(
   () => import('./views/pages/unidadesMedida/UnidadesDeMedidaPage'),
@@ -156,6 +159,7 @@ export const routes = [
   { path: '/paises/listar', name: 'Paises', element: PaisPage },
   { path: '/provincias/listar', name: 'Provincias', element: ProvinciaPage },
   { path: '/departamentos/listar', name: 'Departamento', element: DepartamentoPage },
+  { path: '/localidades/listar', name: 'Localidad', element: LocalidadPage },
   { path: '/promociones/listar', name: 'Promocion', element: PromocionPage },
   { path: '/unidades-medida/listar', name: 'Unidades de Medida', element: UnidadesDeMedidaPage },
   { path: '/articulos/listar', name: 'Artículos', element: ArticulosPage },

@@ -42,7 +42,13 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
     // Inicializa el estado con los valores del entity o los defaultValue de cada campo
     const initial = {}
     fields.forEach((field) => {
-      if (entity && entity[field.key] !== undefined) {
+      // ── Valor inicial custom ─────────────────────────────
+      if (field.initialValue) {
+        initial[field.key] = field.initialValue(entity)
+      }
+
+      // ── Comportamiento normal ────────────────────────────
+      else if (entity && entity[field.key] !== undefined) {
         if (field.type === 'select' && entity[field.key] && typeof entity[field.key] === 'object') {
           initial[field.key] = entity[field.key].id
         } else if (field.type === 'datetime-local' && entity[field.key]) {
@@ -60,6 +66,11 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
     if (entity?.id !== undefined) initial.id = entity.id
     if (entity?.eliminado !== undefined) initial.eliminado = entity.eliminado
     setFormData(initial)
+    fields.forEach((field) => {
+      if (field.onChangeExtra && initial[field.key]) {
+        field.onChangeExtra(initial[field.key])
+      }
+    })
   }, [entity])
 
   const soloLectura = modo === 'ver'
@@ -85,6 +96,7 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
       case 'select':
         return (
           <CFormSelect
+            key={`${field.key}-${(field.options || []).length}`}
             {...commonProps}
             value={value}
             onChange={(e) => handleChange(field, e.target.value)}
