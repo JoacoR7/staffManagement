@@ -50,6 +50,28 @@ const ArticulosPage = () => {
         { key: 'sinTAC', label: 'Sin TAC', render: (value) => (value ? 'Sí' : 'No'), },
         { key: 'esIngrediente', label: 'Es Ingrediente', render: (value) => (value ? 'Sí' : 'No'), },
         { key: 'unidadDeMedida.nombre', label: 'Unidad de Medida' },
+        {
+          key: 'stocks',
+          label: 'Stock Actual',
+          render: (stocks) => {
+            const stockActivo = stocks?.find((s) => !s.eliminado)
+
+            return stockActivo
+              ? stockActivo.cantidadActual
+              : 'Sin stock'
+          },
+        },
+        {
+          key: 'stocks',
+          label: 'Stock Mínimo',
+          render: (stocks) => {
+            const stockActivo = stocks?.find((s) => !s.eliminado)
+
+            return stockActivo
+              ? stockActivo.minimo
+              : '-'
+          },
+        },
       ]}
       fields={[
         {
