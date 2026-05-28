@@ -39,6 +39,31 @@ import {
  */
 const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
   const [formData, setFormData] = useState({})
+  const [errores, setErrores] = useState({})
+
+  const validarFormulario = () => {
+    const nuevosErrores = {}
+
+    fields.forEach((field) => {
+      if (!field.required) return
+
+      const value = formData[field.key]
+
+      const vacio =
+        value === undefined ||
+        value === null ||
+        value === '' ||
+        (field.type === 'checkbox' && value === false)
+
+      if (vacio) {
+        nuevosErrores[field.key] = 'Este campo es obligatorio'
+      }
+    })
+
+    setErrores(nuevosErrores)
+
+    return Object.keys(nuevosErrores).length === 0
+  }
 
   useEffect(() => {
     // Inicializa el estado con los valores del entity o los defaultValue de cada campo
@@ -219,6 +244,11 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
                 </CFormLabel>
 
                 {renderField(field)}
+                {errores[field.key] && (
+                  <div className="text-danger mt-1">
+                    {errores[field.key]}
+                  </div>
+                )}
               </>
             )}
           </div>
@@ -230,7 +260,11 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
           Cancelar
         </CButton>
         {!soloLectura && (
-          <CButton color="primary" onClick={() => onGuardar(formData)}>
+          <CButton color="primary" onClick={() => {
+            if (validarFormulario()) {
+              onGuardar(formData)
+            }
+          }}>
             Guardar
           </CButton>
         )}
