@@ -90,7 +90,6 @@ const ReciboPage = () => {
   return (
     <GenericPage
       apiBase="http://localhost:9000/api/v1/reciboDeSueldo"
-      flatList={true}
       tituloLista="Lista de Recibos de Sueldo"
       columns={columns}
 
@@ -118,24 +117,20 @@ const ReciboPage = () => {
         <ReciboForm
           {...props}
           onGuardar={(payload) => {
-            if (props.modo === 'crear') {
-              // Ajustar exclusivamente el payload para el método POST (crear recibo)
-              const postPayload = {
-                empleado: payload.empleado,
-                fechaDePago: payload.fechaDePago,
-                mesPago: payload.mesPago,
-                observacion: payload.observacion,
-                detalles: payload.detalles.map((d) => ({
-                  cantidad: d.cantidad,
-                  valor: d.valor,
-                  tipoDetalleRecibo: d.tipoDetalleRecibo,
-                  itemReciboDeSueldo: d.itemReciboDeSueldo,
-                })),
-              }
-              props.onGuardar(postPayload)
-            } else {
-              props.onGuardar(payload)
+            // Adaptar el payload al formato esperado por ReciboDeSueldoRequestDTO en el backend (tanto para crear como editar)
+            const dtoPayload = {
+              empleadoId: payload.empleado?.id,
+              fechaDePago: payload.fechaDePago,
+              mesPago: payload.mesPago,
+              observacion: payload.observacion,
+              detalles: (payload.detalles || []).map((d) => ({
+                cantidad: d.cantidad,
+                valor: d.valor,
+                tipoDetalleRecibo: d.tipoDetalleRecibo,
+                itemReciboDeSueldoId: d.itemReciboDeSueldo?.id,
+              })),
             }
+            props.onGuardar(dtoPayload)
           }}
           empleados={empleados}
           items={items}
