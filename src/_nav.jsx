@@ -158,6 +158,11 @@ const _nav = [
         name: 'Registro de horarios',
         to: '/registroHorario/listar',
       },
+      {
+        component: CNavItem,
+        name: 'Recibos de sueldo',
+        to: '/recibos-de-sueldo/listar',
+      }
     ],
   },
   {
