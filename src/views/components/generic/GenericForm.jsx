@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMeme } from 'react'
+import Select from 'react-select'
+
 import {
   CButton,
   CCard,
@@ -37,6 +39,31 @@ import {
  */
 const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
   const [formData, setFormData] = useState({})
+  const [errores, setErrores] = useState({})
+
+  const validarFormulario = () => {
+    const nuevosErrores = {}
+
+    fields.forEach((field) => {
+      if (!field.required) return
+
+      const value = formData[field.key]
+
+      const vacio =
+        value === undefined ||
+        value === null ||
+        value === '' ||
+        (field.type === 'checkbox' && value === false)
+
+      if (vacio) {
+        nuevosErrores[field.key] = 'Este campo es obligatorio'
+      }
+    })
+
+    setErrores(nuevosErrores)
+
+    return Object.keys(nuevosErrores).length === 0
+  }
 
   useEffect(() => {
     // Inicializa el estado con los valores del entity o los defaultValue de cada campo
@@ -95,19 +122,48 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
     switch (field.type) {
       case 'select':
         return (
-          <CFormSelect
-            key={`${field.key}-${(field.options || []).length}`}
-            {...commonProps}
-            value={value}
-            onChange={(e) => handleChange(field, e.target.value)}
-          >
-            <option value="">-- Seleccionar --</option>
-            {(field.options || []).map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </CFormSelect>
+            <Select
+              options={field.options || []}
+              value={
+                (field.options || []).find(
+                  (o) => o.value === value
+                ) || null
+              }
+              onChange={(selected) =>
+                handleChange(field, selected?.value || '')
+              }
+              placeholder="-- Seleccionar --"
+              isClearable
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  backgroundColor: 'var(--cui-body-bg)',
+                  borderColor: 'var(--cui-border-color)',
+                  color: 'var(--cui-body-color)',
+                }),
+                menu: (base) => ({
+                  ...base,
+                  backgroundColor: 'var(--cui-body-bg)',
+                  color: 'var(--cui-body-color)',
+                }),
+                singleValue: (base) => ({
+                  ...base,
+                  color: 'var(--cui-body-color)',
+                }),
+                input: (base) => ({
+                  ...base,
+                  color: 'var(--cui-body-color)',
+                }),
+                option: (base, state) => ({
+                  ...base,
+                  backgroundColor: state.isFocused
+                    ? 'var(--cui-tertiary-bg)'
+                    : 'var(--cui-body-bg)',
+                  color: 'var(--cui-body-color)',
+                  cursor: 'pointer',
+                }),
+              }}
+            />
         )
 
       case 'textarea':
@@ -188,6 +244,11 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
                 </CFormLabel>
 
                 {renderField(field)}
+                {errores[field.key] && (
+                  <div className="text-danger mt-1">
+                    {errores[field.key]}
+                  </div>
+                )}
               </>
             )}
           </div>
@@ -199,7 +260,11 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
           Cancelar
         </CButton>
         {!soloLectura && (
-          <CButton color="primary" onClick={() => onGuardar(formData)}>
+          <CButton color="primary" onClick={() => {
+            if (validarFormulario()) {
+              onGuardar(formData)
+            }
+          }}>
             Guardar
           </CButton>
         )}

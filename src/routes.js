@@ -75,23 +75,34 @@ const ProvinciaPage = React.lazy(() => import('./views/pages/provincias/Provinci
 const DepartamentoPage = React.lazy(() => import('./views/pages/departamentos/DepartamentoPage'))
 const LocalidadPage = React.lazy(() => import('./views/pages/localidades/LocalidadPage'))
 
-// Promocion
-const PromocionPage = React.lazy(() => import('./views/pages/promocion/PromocionPage'))
+
 
 // Sección artículos
 //Artículos
 const ArticulosPage = React.lazy(() => import('./views/pages/articulos/ArticulosPage'))
 
+const ReciboPage = React.lazy(() => import('./views/pages/reciboDeSueldo/ReciboPage'))
+
+// Unidades de medida
+const UnidadesDeMedidaPage = React.lazy(
+  () => import('./views/pages/unidadesMedida/UnidadesDeMedidaPage'),
+)
+
+// Promocion
+const PromocionPage = React.lazy(() => import('./views/pages/promocion/PromocionPage'))
+
+// Stock
+const StockPage = React.lazy(() => import('./views/pages/stock/StockPage'))
+
+// Movimiento stock
+const MovimientoStockPage = React.lazy(() => import('./views/pages/movimientoStock/MovimientoStockPage'))
+
+// Sección empleados
 const EmpleadoPage = React.lazy(() => import('./views/pages/empleado/EmpleadoPage'))
 const RegistroHorarioPage = React.lazy(
   () => import('./views/pages/registroHorario/RegistroHorario'),
 )
 
-const ReciboPage = React.lazy(() => import('./views/pages/reciboDeSueldo/ReciboPage'))
-// Unidades de medida
-const UnidadesDeMedidaPage = React.lazy(
-  () => import('./views/pages/unidadesMedida/UnidadesDeMedidaPage'),
-)
 
 /**
  * Array of route configuration objects
@@ -168,6 +179,8 @@ export const routes = [
   { path: '/empleados/listar', name: 'Empleados', element: EmpleadoPage },
   { path: '/registroHorario/listar', name: 'Registro Horario', element: RegistroHorarioPage },
   { path: '/recibos-de-sueldo/listar', name: 'Recibos de Sueldo', element: ReciboPage },
+  { path: '/stock/listar', name: 'Stock', element: StockPage },
+  { path: '/movimientos-stock/listar', name: 'Movimiento Stock', element: MovimientoStockPage },
 ]
 
 export default routes

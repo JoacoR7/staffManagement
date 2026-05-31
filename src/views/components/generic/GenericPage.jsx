@@ -47,7 +47,7 @@ const GenericPage = ({
   tituloLista,
   titulos,
   columns,
-  fields,
+  fields = [],
   deleteMessage,
   deleteButtonText = 'Eliminar',
   tamanioPagina = 20,
@@ -58,6 +58,8 @@ const GenericPage = ({
   permitirVer = true,
   permitirBorrar = true,
   accionesExtra = [],
+  renderForm,
+  flatList = false,
 }) => {
   const { apiFetch } = useApi()
 
@@ -87,14 +89,20 @@ const GenericPage = ({
 
   const cargarDatos = async (page) => {
     try {
-      const response = await apiFetch(`${apiBase}/paged?page=${page}&size=${tamanioPagina}`)
+      const url = flatList ? apiBase : `${apiBase}/paged?page=${page}&size=${tamanioPagina}`
+      const response = await apiFetch(url)
       const data = await response.json()
       if (!response.ok) {
         manejarError(data.error)
         return
       }
-      setItems(data.content || [])
-      setTotalPaginas(data.totalPages || 1)
+      if (flatList || Array.isArray(data)) {
+        setItems(data || [])
+        setTotalPaginas(1)
+      } else {
+        setItems(data.content || [])
+        setTotalPaginas(data.totalPages || 1)
+      }
     } catch (error) {
       manejarError(error.message)
     }
@@ -257,6 +265,14 @@ const GenericPage = ({
           permitirBorrar={permitirBorrar}
           accionesExtra={accionesExtraWrapped}
         />
+      ) : renderForm ? (
+        renderForm({
+          modo,
+          entity: seleccionado,
+          onClose: volverALista,
+          onGuardar: guardar,
+          manejarError,
+        })
       ) : (
         <GenericForm
           modo={modo}

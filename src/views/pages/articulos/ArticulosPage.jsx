@@ -10,10 +10,18 @@ const ArticulosPage = () => {
 
   const cargarUnidades = async () => {
     try {
-      const response = await fetch('http://localhost:9000/api/v1/unidadDeMedida')
+      const token = localStorage.getItem('token')
+      const response = await fetch(
+        'http://localhost:9000/api/v1/unidadDeMedida',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      )
 
       const data = await response.json()
-      console.log('Unidades de medida cargadas:', data)
 
       const opciones = data.map((u) => ({
         value: u.id,
@@ -42,6 +50,28 @@ const ArticulosPage = () => {
         { key: 'sinTAC', label: 'Sin TAC', render: (value) => (value ? 'Sí' : 'No'), },
         { key: 'esIngrediente', label: 'Es Ingrediente', render: (value) => (value ? 'Sí' : 'No'), },
         { key: 'unidadDeMedida.nombre', label: 'Unidad de Medida' },
+        {
+          key: 'stocks',
+          label: 'Stock Actual',
+          render: (stocks) => {
+            const stockActivo = stocks?.find((s) => !s.eliminado)
+
+            return stockActivo
+              ? stockActivo.cantidadActual
+              : 'Sin stock'
+          },
+        },
+        {
+          key: 'stocks',
+          label: 'Stock Mínimo',
+          render: (stocks) => {
+            const stockActivo = stocks?.find((s) => !s.eliminado)
+
+            return stockActivo
+              ? stockActivo.minimo
+              : '-'
+          },
+        },
       ]}
       fields={[
         {
