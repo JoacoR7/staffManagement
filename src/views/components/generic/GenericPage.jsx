@@ -42,6 +42,7 @@ import { useApi } from '@/hooks/useApi'
 const GenericPage = ({
   apiBase,
   apiCrear,
+  apiList,
   cargarDetalle,
   transformEntity,
   tituloLista,
@@ -89,8 +90,18 @@ const GenericPage = ({
 
   const cargarDatos = async (page) => {
     try {
-      const url = flatList ? apiBase : `${apiBase}/paged?page=${page}&size=${tamanioPagina}`
+      let url
+
+      if (apiList) {
+        url = apiList
+      } else if (flatList) {
+        url = apiBase
+      } else {
+        url = `${apiBase}/paged?page=${page}&size=${tamanioPagina}`
+      }
+
       const response = await apiFetch(url)
+
       const data = await response.json()
       if (!response.ok) {
         manejarError(data.error)
