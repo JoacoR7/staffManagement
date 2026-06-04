@@ -75,8 +75,6 @@ const ProvinciaPage = React.lazy(() => import('./views/pages/provincias/Provinci
 const DepartamentoPage = React.lazy(() => import('./views/pages/departamentos/DepartamentoPage'))
 const LocalidadPage = React.lazy(() => import('./views/pages/localidades/LocalidadPage'))
 
-
-
 // Sección artículos
 //Artículos
 const ArticulosPage = React.lazy(() => import('./views/pages/articulos/ArticulosPage'))
@@ -95,7 +93,9 @@ const PromocionPage = React.lazy(() => import('./views/pages/promocion/Promocion
 const StockPage = React.lazy(() => import('./views/pages/stock/StockPage'))
 
 // Movimiento stock
-const MovimientoStockPage = React.lazy(() => import('./views/pages/movimientoStock/MovimientoStockPage'))
+const MovimientoStockPage = React.lazy(
+  () => import('./views/pages/movimientoStock/MovimientoStockPage'),
+)
 
 // Sección empleados
 const EmpleadoPage = React.lazy(() => import('./views/pages/empleado/EmpleadoPage'))
@@ -103,6 +103,9 @@ const RegistroHorarioPage = React.lazy(
   () => import('./views/pages/registroHorario/RegistroHorario'),
 )
 
+// Categoria
+const CategoriaPage = React.lazy(() => import('./views/pages/categorias/CategoriaPage'))
+const CartaPage = React.lazy(() => import('./views/pages/cartas/CartaPage'))
 
 /**
  * Array of route configuration objects
@@ -181,6 +184,8 @@ export const routes = [
   { path: '/recibos-de-sueldo/listar', name: 'Recibos de Sueldo', element: ReciboPage },
   { path: '/stock/listar', name: 'Stock', element: StockPage },
   { path: '/movimientos-stock/listar', name: 'Movimiento Stock', element: MovimientoStockPage },
+  { path: '/categorias/listar', name: 'Categoria', element: CategoriaPage },
+  { path: '/cartas/listar', name: 'Carta', element: CartaPage },
 ]
 
 export default routes
