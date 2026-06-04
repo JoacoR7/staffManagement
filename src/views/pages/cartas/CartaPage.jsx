@@ -1,13 +1,28 @@
 import React from 'react'
 import GenericPage from '../../components/generic/GenericPage'
 import CartaForm from './CartaForm'
+import { useApi } from '@/hooks/useApi'
 
 const CartaPage = () => {
+  const { apiFetch } = useApi()
+
+  const cargarDetalle = async (item) => {
+    const response = await apiFetch(`http://localhost:9000/api/v1/carta/${item.id}`)
+
+    if (!response.ok) {
+      throw new Error('Error obteniendo detalle de la carta')
+    }
+
+    return await response.json()
+  }
+
   return (
     <GenericPage
       apiBase="http://localhost:9000/api/v1/carta"
-      apiCrear="http://localhost:9000/api/v1/carta/crear-completa"
+      apiCrear="http://localhost:9000/api/v1/carta/crear"
+      apiEditar={'http://localhost:9000/api/v1/carta/editar'}
       apiList="http://localhost:9000/api/v1/carta/listado"
+      cargarDetalle={cargarDetalle}
       tituloLista="Lista de Cartas"
       titulos={{
         crear: 'Nueva Carta',

@@ -42,6 +42,7 @@ import { useApi } from '@/hooks/useApi'
 const GenericPage = ({
   apiBase,
   apiCrear,
+  apiEditar,
   apiList,
   cargarDetalle,
   transformEntity,
@@ -207,7 +208,13 @@ const GenericPage = ({
 
   const guardar = async (payload) => {
     try {
-      const url = modo === 'crear' ? apiCrear || apiBase : `${apiBase}/${seleccionado.id}`
+      const url =
+        modo === 'crear'
+          ? apiCrear || apiBase
+          : apiEditar
+            ? `${apiEditar}/${seleccionado.id}`
+            : `${apiBase}/${seleccionado.id}`
+
       const metodo = modo === 'crear' ? 'POST' : 'PUT'
 
       const payloadTransformado = { ...payload }
