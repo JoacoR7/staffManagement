@@ -7,6 +7,7 @@ import {
   CCardHeader,
   CFormInput,
   CFormLabel,
+  CFormSwitch,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -134,6 +135,7 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
   const [fechaDesde, setFechaDesde] = useState('')
   const [fechaHasta, setFechaHasta] = useState('')
   const [nombre, setNombre] = useState('')
+  const [activo, setActivo] = useState(false)
   const [categoriasDisponibles, setCategoriasDisponibles] = useState([])
   const [articulosDisponibles, setArticulosDisponibles] = useState([])
   const [menusDisponibles, setMenusDisponibles] = useState([])
@@ -184,9 +186,8 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
   }, [apiFetch])
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     cargarDatos()
-  }, [cargarDatos])
+  }, [])
 
   useEffect(() => {
     if (entity) {
@@ -194,6 +195,7 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
       setNombre(entity.nombre || '')
       setFechaDesde(entity.fechaDesde?.slice(0, 10) || '')
       setFechaHasta(entity.fechaHasta?.slice(0, 10) || '')
+      setActivo(Boolean(entity.activo))
       setCategorias(
         (entity.categorias || []).map((c) => ({
           id: c.id || '',
@@ -244,6 +246,11 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
     const copia = [...categorias]
     copia[categoriaIndex].productos.push({ id: '', nombre: '', descripcion: '', precio: 0 })
     setCategorias(copia)
+    setSubseccionesExpandidas((prev) => {
+      const nuevo = new Set(prev)
+      nuevo.add(subseccionKey(categoriaIndex, 'articulos'))
+      return nuevo
+    })
   }
 
   const eliminarArticulo = (categoriaIndex, articuloIndex) => {
@@ -283,6 +290,11 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
     }
     copia[categoriaIndex].menus.push({ id: '', nombre: '', precio: 0 })
     setCategorias(copia)
+    setSubseccionesExpandidas((prev) => {
+      const nuevo = new Set(prev)
+      nuevo.add(subseccionKey(categoriaIndex, 'menus'))
+      return nuevo
+    })
   }
 
   const eliminarMenu = (categoriaIndex, menuIndex) => {
@@ -308,6 +320,7 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
       nombre,
       fechaDesde,
       fechaHasta,
+      activo,
       categorias: categorias.map((c) => ({
         id: c.id,
         productos: c.productos.filter((p) => p.id).map((p) => ({ id: p.id, precio: p.precio })),
@@ -355,6 +368,32 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
             />
           </div>
         </div>
+
+        {modo === 'editar' && (
+          <div
+            className="d-flex align-items-center gap-2 mb-4 p-2"
+            style={{
+              background: 'var(--cui-tertiary-bg)',
+              border: '1px solid var(--cui-border-color)',
+              borderRadius: '6px',
+            }}
+          >
+            <CFormSwitch
+              id="carta-activo"
+              checked={activo}
+              disabled={soloLectura}
+              onChange={(e) => setActivo(e.target.checked)}
+              label={
+                <span className="fw-semibold" style={{ color: 'var(--cui-body-color)' }}>
+                  Carta activa
+                </span>
+              }
+            />
+            <CBadge color={activo ? 'success' : 'secondary'} shape="rounded-pill">
+              {activo ? 'Activa' : 'Inactiva'}
+            </CBadge>
+          </div>
+        )}
 
         <div
           className="d-flex align-items-center gap-2 mb-3"
@@ -502,7 +541,8 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
                             <CTableDataCell>
                               <CFormInput
                                 type="number"
-                                value={producto.precio}
+                                step="100"
+                                value={producto.precio ?? 0}
                                 disabled={soloLectura}
                                 onChange={(e) =>
                                   cambiarPrecio(categoriaIndex, articuloIndex, e.target.value)
@@ -602,9 +642,12 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
                             </CTableDataCell>
 
                             <CTableDataCell>
-                              <span style={{ color: 'var(--cui-body-color)' }}>
-                                ${Number(menu.precio ?? 0).toFixed(2)}
-                              </span>
+                              <CFormInput
+                                type="number"
+                                value={Number(menu.precio ?? 0).toFixed(2)}
+                                disabled
+                                style={{ minWidth: '90px' }}
+                              />
                             </CTableDataCell>
 
                             {!soloLectura && (
