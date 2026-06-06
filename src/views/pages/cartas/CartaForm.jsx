@@ -74,9 +74,10 @@ const numeroBadgeStyle = {
   fontSize: '12px',
 }
 
-const articulosSeparadorStyle = {
+const subseccionSeparadorStyle = {
   borderTop: '1px dashed var(--cui-border-color)',
   paddingTop: '0.75rem',
+  marginTop: '0.5rem',
 }
 
 const BotonEliminar = ({ onClick, title }) => (
@@ -99,8 +100,6 @@ const BotonAgregar = ({ onClick, children }) => (
   </CButton>
 )
 
-// Componente principal
-
 const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
   const { apiFetch } = useApi()
 
@@ -109,6 +108,7 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
   const [nombre, setNombre] = useState('')
   const [categoriasDisponibles, setCategoriasDisponibles] = useState([])
   const [articulosDisponibles, setArticulosDisponibles] = useState([])
+  const [menusDisponibles, setMenusDisponibles] = useState([])
   const [categorias, setCategorias] = useState([])
 
   const soloLectura = modo === 'ver'
@@ -122,27 +122,59 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
       setNombre(entity.nombre || '')
       setFechaDesde(entity.fechaDesde?.slice(0, 10) || '')
       setFechaHasta(entity.fechaHasta?.slice(0, 10) || '')
-      setCategorias(entity.categorias || [])
+      setCategorias(
+        (entity.categorias || []).map((c) => ({
+          id: c.id || '',
+          nombre: c.nombre || '',
+          productos: c.productos || [],
+          menus: c.menus || [],
+        })),
+      )
     }
   }, [entity])
 
   const cargarDatos = async () => {
-    const [catResp, artResp] = await Promise.all([
+    const [catResult, artResult, menuResult] = await Promise.allSettled([
       apiFetch('http://localhost:9000/api/v1/categoria'),
       apiFetch('http://localhost:9000/api/v1/articulo'),
+      apiFetch('http://localhost:9000/api/v1/menu/listado-simple'),
     ])
 
-    const categoriasData = await catResp.json()
-    const articulosData = await artResp.json()
+    if (catResult.status === 'fulfilled') {
+      const categoriasData = await catResult.value.json()
+      setCategoriasDisponibles(
+        (Array.isArray(categoriasData) ? categoriasData : []).map((c) => ({
+          value: c.id,
+          label: c.nombre,
+        })),
+      )
+    }
 
-    setCategoriasDisponibles(categoriasData.map((c) => ({ value: c.id, label: c.nombre })))
-    setArticulosDisponibles(
-      articulosData.map((a) => ({ value: a.id, label: a.nombre, descripcion: a.descripcion })),
-    )
+    if (artResult.status === 'fulfilled') {
+      const articulosData = await artResult.value.json()
+      setArticulosDisponibles(
+        (Array.isArray(articulosData) ? articulosData : []).map((a) => ({
+          value: a.id,
+          label: a.nombre,
+          descripcion: a.descripcion,
+        })),
+      )
+    }
+
+    if (menuResult.status === 'fulfilled') {
+      const menusData = await menuResult.value.json()
+      setMenusDisponibles(
+        (Array.isArray(menusData) ? menusData : []).map((m) => ({
+          value: m.id,
+          label: m.nombre,
+          precio: m.precio,
+        })),
+      )
+    }
   }
 
   const agregarCategoria = () => {
-    setCategorias([...categorias, { id: '', nombre: '', productos: [] }])
+    setCategorias([...categorias, { id: '', nombre: '', productos: [], menus: [] }])
   }
 
   const cambiarCategoria = (index, categoriaId) => {
@@ -188,8 +220,44 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
     setCategorias(copia)
   }
 
+  const agregarMenu = (categoriaIndex) => {
+    const copia = [...categorias]
+    if (!copia[categoriaIndex].menus) {
+      copia[categoriaIndex].menus = []
+    }
+    copia[categoriaIndex].menus.push({ id: '', nombre: '', precio: 0 })
+    setCategorias(copia)
+  }
+
+  const eliminarMenu = (categoriaIndex, menuIndex) => {
+    const copia = [...categorias]
+    copia[categoriaIndex].menus.splice(menuIndex, 1)
+    setCategorias(copia)
+  }
+
+  const cambiarMenu = (categoriaIndex, menuIndex, menuId) => {
+    const menu = menusDisponibles.find((m) => m.value === menuId)
+    const copia = [...categorias]
+    copia[categoriaIndex].menus[menuIndex] = {
+      ...copia[categoriaIndex].menus[menuIndex],
+      id: menu?.value || '',
+      nombre: menu?.label || '',
+      precio: menu?.precio ?? 0,
+    }
+    setCategorias(copia)
+  }
+
   const guardar = () => {
-    onGuardar({ nombre, fechaDesde, fechaHasta, categorias })
+    onGuardar({
+      nombre,
+      fechaDesde,
+      fechaHasta,
+      categorias: categorias.map((c) => ({
+        id: c.id,
+        productos: c.productos.filter((p) => p.id).map((p) => ({ id: p.id, precio: p.precio })),
+        menus: (c.menus || []).filter((m) => m.id).map((m) => ({ id: m.id })),
+      })),
+    })
   }
 
   return (
@@ -237,7 +305,7 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
           style={{ borderTop: '2px solid var(--cui-border-color)', paddingTop: '1rem' }}
         >
           <span className="fw-semibold fs-6" style={{ color: 'var(--cui-body-color)' }}>
-            Categorías y artículos
+            Categorías
           </span>
           <CBadge color="secondary" shape="rounded-pill">
             {categorias.length}
@@ -278,7 +346,10 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
               </div>
 
               {/* Sub-sección artículos */}
-              <div className="d-flex align-items-center gap-2 mb-2" style={articulosSeparadorStyle}>
+              <div
+                className="d-flex align-items-center gap-2 mb-2"
+                style={subseccionSeparadorStyle}
+              >
                 <span style={{ fontSize: '13px', color: 'var(--cui-secondary-color)' }}>
                   Artículos
                 </span>
@@ -359,6 +430,84 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
               {!soloLectura && (
                 <BotonAgregar onClick={() => agregarArticulo(categoriaIndex)}>
                   Agregar artículo
+                </BotonAgregar>
+              )}
+
+              {/* Sub-sección menús */}
+              <div
+                className="d-flex align-items-center gap-2 mb-2"
+                style={subseccionSeparadorStyle}
+              >
+                <span style={{ fontSize: '13px', color: 'var(--cui-secondary-color)' }}>Menús</span>
+                <CBadge color="secondary" shape="rounded-pill" style={{ fontSize: '11px' }}>
+                  {(categoria.menus || []).length}
+                </CBadge>
+              </div>
+
+              {(categoria.menus || []).length > 0 && (
+                <CTable
+                  small
+                  bordered
+                  style={{
+                    fontSize: '14px',
+                    marginBottom: '0.75rem',
+                    background: 'var(--cui-body-bg)',
+                  }}
+                >
+                  <CTableHead>
+                    <CTableRow>
+                      <CTableHeaderCell style={{ fontWeight: 500, fontSize: '13px' }}>
+                        Menú
+                      </CTableHeaderCell>
+                      <CTableHeaderCell style={{ width: '20%', fontWeight: 500, fontSize: '13px' }}>
+                        Precio
+                      </CTableHeaderCell>
+                      {!soloLectura && <CTableHeaderCell style={{ width: '1%' }} />}
+                    </CTableRow>
+                  </CTableHead>
+
+                  <CTableBody>
+                    {(categoria.menus || []).map((menu, menuIndex) => (
+                      <CTableRow key={menuIndex}>
+                        <CTableDataCell>
+                          <Select
+                            isDisabled={soloLectura}
+                            options={menusDisponibles}
+                            value={menusDisponibles.find((m) => m.value === menu.id) || null}
+                            onChange={(selected) =>
+                              cambiarMenu(categoriaIndex, menuIndex, selected?.value)
+                            }
+                            placeholder="Seleccionar menú..."
+                            styles={selectStyles}
+                          />
+                        </CTableDataCell>
+
+                        <CTableDataCell>
+                          <span style={{ color: 'var(--cui-body-color)' }}>
+                            ${Number(menu.precio ?? 0).toFixed(2)}
+                          </span>
+                        </CTableDataCell>
+
+                        {!soloLectura && (
+                          <CTableDataCell
+                            className="text-center"
+                            style={{ verticalAlign: 'middle' }}
+                          >
+                            <BotonEliminar
+                              onClick={() => eliminarMenu(categoriaIndex, menuIndex)}
+                              title="Quitar menú"
+                            />
+                          </CTableDataCell>
+                        )}
+                      </CTableRow>
+                    ))}
+                  </CTableBody>
+                </CTable>
+              )}
+
+              {!soloLectura && (
+                <BotonAgregar onClick={() => agregarMenu(categoriaIndex)}>
+                  Agregar menú
                 </BotonAgregar>
               )}
             </div>
