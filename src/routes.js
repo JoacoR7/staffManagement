@@ -106,6 +106,7 @@ const RegistroHorarioPage = React.lazy(
 // Categoria
 const CategoriaPage = React.lazy(() => import('./views/pages/categorias/CategoriaPage'))
 const CartaPage = React.lazy(() => import('./views/pages/cartas/CartaPage'))
+const MenuPage = React.lazy(() => import('./views/pages/menus/MenuPage'))
 
 /**
  * Array of route configuration objects
@@ -186,6 +187,7 @@ export const routes = [
   { path: '/movimientos-stock/listar', name: 'Movimiento Stock', element: MovimientoStockPage },
   { path: '/categorias/listar', name: 'Categoria', element: CategoriaPage },
   { path: '/cartas/listar', name: 'Carta', element: CartaPage },
+  { path: '/menus/listar', name: 'Menú', element: MenuPage },
 ]
 
 export default routes

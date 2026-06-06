@@ -126,6 +126,11 @@ const _nav = [
         name: 'Carta',
         to: '/cartas/listar',
       },
+      {
+        component: CNavItem,
+        name: 'Menú',
+        to: '/menus/listar',
+      },
     ],
   },
   {
