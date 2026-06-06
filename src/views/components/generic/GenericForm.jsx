@@ -94,7 +94,7 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
     if (entity?.eliminado !== undefined) initial.eliminado = entity.eliminado
     setFormData(initial)
     fields.forEach((field) => {
-      if (field.onChangeExtra && initial[field.key]) {
+      if (field.onChangeExtra && initial[field.key] && !field.skipInitExtra) {
         field.onChangeExtra(initial[field.key])
       }
     })

@@ -109,6 +109,11 @@ const _nav = [
         name: 'Localidad',
         to: '/localidades/listar',
       },
+      {
+        component: CNavItem,
+        name: 'Dirección',
+        to: '/direccion/listar',
+      },
     ],
   },
   {

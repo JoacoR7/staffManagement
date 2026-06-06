@@ -7,11 +7,16 @@ const EmpleadoPage = () => {
   const [direcciones, setDirecciones] = useState([])
 
   useEffect(() => {
-    apiFetch('http://localhost:9000/api/v1/direcciones')
+    apiFetch('http://localhost:9000/api/v1/direccion')
       .then((res) => res.json())
       .then((data) => {
         const lista = Array.isArray(data) ? data : data.content || []
-        setDirecciones(lista.map((l) => ({ value: l.id, label: l.nombre })))
+        setDirecciones(
+          lista.map((l) => ({
+            value: l.id,
+            label: `${l.calle} ${l.numeracion ?? ''} - ${l.barrio}`,
+          }))
+        )
       })
       .catch(() => {})
   }, [])

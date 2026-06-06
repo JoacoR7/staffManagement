@@ -74,6 +74,7 @@ const PaisPage = React.lazy(() => import('./views/pages/paises/PaisPage'))
 const ProvinciaPage = React.lazy(() => import('./views/pages/provincias/ProvinciaPage'))
 const DepartamentoPage = React.lazy(() => import('./views/pages/departamentos/DepartamentoPage'))
 const LocalidadPage = React.lazy(() => import('./views/pages/localidades/LocalidadPage'))
+const DireccionPage = React.lazy(() => import('./views/pages/direccion/DireccionPage'))
 
 // Sección artículos
 //Artículos
@@ -188,6 +189,7 @@ export const routes = [
   { path: '/categorias/listar', name: 'Categoria', element: CategoriaPage },
   { path: '/cartas/listar', name: 'Carta', element: CartaPage },
   { path: '/menus/listar', name: 'Menú', element: MenuPage },
+  { path: '/direccion/listar', name: 'Direcciones', element: DireccionPage },
 ]
 
 export default routes
