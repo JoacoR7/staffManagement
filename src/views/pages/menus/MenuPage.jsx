@@ -3,6 +3,11 @@ import GenericPage from '../../components/generic/GenericPage'
 import MenuForm from './MenuForm'
 import { useApi } from '@/hooks/useApi'
 
+const truncate = (text, max = 50) => {
+  if (!text) return ''
+  return text.length > max ? `${text.slice(0, max).trimEnd()}…` : text
+}
+
 const MenuPage = () => {
   const { apiFetch } = useApi()
 
@@ -31,6 +36,11 @@ const MenuPage = () => {
       }}
       columns={[
         { key: 'nombre', label: 'Nombre' },
+        {
+          key: 'descripcion',
+          label: 'Descripción',
+          render: (value) => truncate(value, 50),
+        },
         {
           key: 'precio',
           label: 'Precio',
