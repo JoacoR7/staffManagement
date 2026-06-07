@@ -28,7 +28,7 @@ const EmpleadoPage = () => {
       cargarDetalle={async (item) => {
         const res = await apiFetch(`http://localhost:9000/api/v1/empleado/${item.id}`)
         const data = await res.json()
-        return { ...data, direccionId: data.direccion?.id }
+        return { ...data, direccionId: data.direccionId }
       }}
       multipart={true}
       tituloLista="Lista de empleados"
