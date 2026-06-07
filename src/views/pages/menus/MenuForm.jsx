@@ -7,6 +7,7 @@ import {
   CCardHeader,
   CFormInput,
   CFormLabel,
+  CFormTextarea,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -76,23 +77,12 @@ const MenuForm = ({ modo, entity, onClose, onGuardar }) => {
   const { apiFetch } = useApi()
 
   const [nombre, setNombre] = useState('')
+  const [descripcion, setDescripcion] = useState('')
   const [precio, setPrecio] = useState('')
   const [articulosDisponibles, setArticulosDisponibles] = useState([])
   const [detalles, setDetalles] = useState([])
 
   const soloLectura = modo === 'ver'
-
-  useEffect(() => {
-    cargarDatos()
-  }, [])
-
-  useEffect(() => {
-    if (entity) {
-      setNombre(entity.nombre || '')
-      setPrecio(entity.precio ?? '')
-      setDetalles(entity.detalles || [])
-    }
-  }, [entity])
 
   const cargarDatos = async () => {
     const artResp = await apiFetch('http://localhost:9000/api/v1/articulo')
@@ -107,9 +97,24 @@ const MenuForm = ({ modo, entity, onClose, onGuardar }) => {
     )
   }
 
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    cargarDatos()
+  }, [])
+
+  useEffect(() => {
+    if (entity) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setNombre(entity.nombre || '')
+      setDescripcion(entity.descripcion || '')
+      setPrecio(entity.precio ?? '')
+      setDetalles(entity.detalles || [])
+    }
+  }, [entity])
+
   const agregarDetalle = () => {
-    setDetalles([
-      ...detalles,
+    setDetalles((prev) => [
+      ...prev,
       {
         id: '',
         cantidad: 1,
@@ -147,6 +152,7 @@ const MenuForm = ({ modo, entity, onClose, onGuardar }) => {
   const guardar = () => {
     onGuardar({
       nombre,
+      descripcion,
       precio: Number(precio),
       detalles: detalles
         .filter((d) => d.articuloId)
@@ -185,9 +191,20 @@ const MenuForm = ({ modo, entity, onClose, onGuardar }) => {
               onChange={(e) => setPrecio(e.target.value)}
               placeholder="0.00"
               min="0"
-              step="0.01"
+              step="100"
             />
           </div>
+        </div>
+
+        <div className="mb-3">
+          <CFormLabel>Descripción</CFormLabel>
+          <CFormTextarea
+            value={descripcion}
+            disabled={soloLectura}
+            onChange={(e) => setDescripcion(e.target.value)}
+            rows={2}
+            placeholder="Ej: Milanesa con huevo frito y perejil"
+          />
         </div>
 
         <div

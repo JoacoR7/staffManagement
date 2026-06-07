@@ -17,8 +17,15 @@ import {
   CBadge,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilTrash, cilPlus, cilChevronBottom, cilChevronTop } from '@coreui/icons'
-import Select from 'react-select'
+import {
+  cilTrash,
+  cilPlus,
+  cilMinus,
+  cilChevronBottom,
+  cilChevronTop,
+  cilCaretBottom,
+} from '@coreui/icons'
+import Select, { components } from 'react-select'
 import { useApi } from '@/hooks/useApi'
 
 const selectStyles = {
@@ -123,11 +130,34 @@ const BotonToggle = ({ expanded, onClick, title }) => (
     aria-label={title}
     style={{ padding: '0.2rem 0.4rem', lineHeight: 1 }}
   >
-    <CIcon icon={expanded ? cilChevronTop : cilChevronBottom} size="sm" />
+    <CIcon icon={expanded ? cilMinus : cilPlus} size="sm" />
+  </CButton>
+)
+
+const BotonMover = ({ direccion, onClick, disabled, title }) => (
+  <CButton
+    color="secondary"
+    variant="ghost"
+    size="sm"
+    onClick={onClick}
+    title={title}
+    aria-label={title}
+    disabled={disabled}
+    style={{ padding: '0.2rem 0.4rem', lineHeight: 1 }}
+  >
+    <CIcon icon={direccion === 'up' ? cilChevronTop : cilChevronBottom} size="sm" />
   </CButton>
 )
 
 const subseccionKey = (categoriaIndex, tipo) => `${categoriaIndex}-${tipo}`
+
+const DropdownIndicator = (props) => (
+  <components.DropdownIndicator {...props}>
+    <CIcon icon={cilCaretBottom} size="sm" />
+  </components.DropdownIndicator>
+)
+
+const selectComponents = { DropdownIndicator }
 
 const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
   const { apiFetch } = useApi()
@@ -186,6 +216,7 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
   }, [apiFetch])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     cargarDatos()
   }, [])
 
@@ -265,6 +296,15 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
     setCategorias(copia)
   }
 
+  const moverCategoria = (categoriaIndex, direccion) => {
+    const nuevo = [...categorias]
+    const targetIndex = categoriaIndex + direccion
+    if (targetIndex < 0 || targetIndex >= nuevo.length) return
+    const [item] = nuevo.splice(categoriaIndex, 1)
+    nuevo.splice(targetIndex, 0, item)
+    setCategorias(nuevo)
+  }
+
   const cambiarArticulo = (categoriaIndex, articuloIndex, articuloId) => {
     const articulo = articulosDisponibles.find((a) => a.value === articuloId)
     const copia = [...categorias]
@@ -321,8 +361,9 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
       fechaDesde,
       fechaHasta,
       activo,
-      categorias: categorias.map((c) => ({
+      categorias: categorias.map((c, idx) => ({
         id: c.id,
+        orden: idx,
         productos: c.productos.filter((p) => p.id).map((p) => ({ id: p.id, precio: p.precio })),
         menus: (c.menus || []).filter((m) => m.id).map((m) => ({ id: m.id })),
       })),
@@ -438,10 +479,24 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
                   onClick={(e) => e.stopPropagation()}
                 >
                   {!soloLectura && (
-                    <BotonEliminar
-                      onClick={() => eliminarCategoria(categoriaIndex)}
-                      title="Eliminar categoría"
-                    />
+                    <>
+                      <BotonMover
+                        direccion="up"
+                        disabled={categoriaIndex === 0}
+                        onClick={() => moverCategoria(categoriaIndex, -1)}
+                        title="Mover arriba"
+                      />
+                      <BotonMover
+                        direccion="down"
+                        disabled={categoriaIndex === categorias.length - 1}
+                        onClick={() => moverCategoria(categoriaIndex, 1)}
+                        title="Mover abajo"
+                      />
+                      <BotonEliminar
+                        onClick={() => eliminarCategoria(categoriaIndex)}
+                        title="Eliminar categoría"
+                      />
+                    </>
                   )}
                   <BotonToggle
                     expanded={expandida}
@@ -464,6 +519,7 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
                       onChange={(selected) => cambiarCategoria(categoriaIndex, selected?.value)}
                       placeholder="Seleccionar categoría..."
                       styles={selectStyles}
+                      components={selectComponents}
                     />
                   </div>
 
@@ -535,6 +591,7 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
                                 }
                                 placeholder="Seleccionar artículo..."
                                 styles={selectStyles}
+                                components={selectComponents}
                               />
                             </CTableDataCell>
 
@@ -638,6 +695,7 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
                                 }
                                 placeholder="Seleccionar menú..."
                                 styles={selectStyles}
+                                components={selectComponents}
                               />
                             </CTableDataCell>
 
