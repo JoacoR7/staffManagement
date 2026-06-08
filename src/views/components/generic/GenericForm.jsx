@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMeme } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Select from 'react-select'
 
 import {
@@ -9,7 +9,6 @@ import {
   CCardFooter,
   CFormInput,
   CFormLabel,
-  CFormSelect,
   CFormTextarea,
   CFormCheck,
 } from '@coreui/react'
@@ -29,7 +28,7 @@ import {
  * {
  *   key:         {string}          Nombre de la propiedad en el objeto (ej: 'nombre').
  *   label:       {string}          Etiqueta visible (ej: 'Nombre del País').
- *   type:        {string}          'text' | 'number' | 'email' | 'select' | 'textarea' | 'checkbox'
+ *   type:        {string}          'text' | 'number' | 'email' | 'select' | 'textarea' | 'checkbox' | 'file' | 'image'
  *                                  (default: 'text')
  *   placeholder: {string}          Texto de placeholder (opcional).
  *   options:     {Array}           Solo para type='select': [{ value, label }, ...]
@@ -40,6 +39,7 @@ import {
 const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
   const [formData, setFormData] = useState({})
   const [errores, setErrores] = useState({})
+  const objectUrls = useRef([])
 
   const validarFormulario = () => {
     const nuevosErrores = {}
@@ -66,6 +66,12 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
   }
 
   useEffect(() => {
+    return () => {
+      objectUrls.current.forEach(item => URL.revokeObjectURL(item.url))
+    }
+  }, [])
+
+  useEffect(() => {
     // Inicializa el estado con los valores del entity o los defaultValue de cada campo
     const initial = {}
     fields.forEach((field) => {
@@ -82,6 +88,8 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
           initial[field.key] = entity[field.key].slice(0, 16)
         } else if (field.type === 'date' && entity[field.key]) {
           initial[field.key] = entity[field.key].slice(0, 10)
+        } else if (field.type === 'file' || field.type === 'image') {
+          initial[field.key] = null
         } else {
           initial[field.key] = entity[field.key]
         }
@@ -103,10 +111,22 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
   const soloLectura = modo === 'ver'
 
   const handleChange = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field.key]: value,
-    }))
+    setFormData((prev) => {
+      if (field.type === 'file' || field.type === 'image') {
+        const prevVal = prev[field.key]
+        if (prevVal instanceof File) {
+          const url = objectUrls.current.find(u => u.file === prevVal)
+          if (url) {
+            URL.revokeObjectURL(url.url)
+            objectUrls.current = objectUrls.current.filter(u => u.file !== prevVal)
+          }
+        }
+        if (value instanceof File) {
+          objectUrls.current.push({ file: value, url: URL.createObjectURL(value) })
+        }
+      }
+      return { ...prev, [field.key]: value }
+    })
 
     if (field.onChangeExtra) {
       field.onChangeExtra(value)
@@ -187,17 +207,29 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
         )
 
       case 'file':
-        return soloLectura ? (
-          value ? (
-            <img src={value} alt="foto" style={{ maxWidth: '150px', borderRadius: '4px' }} />
-          ) : null
-        ) : (
-          <CFormInput
-            type="file"
-            accept="image/*"
-            onChange={(e) => handleChange(field.key, e.target.files[0] || null)}
-          />
+      case 'image': {
+        const previewUrl = value instanceof File
+          ? URL.createObjectURL(value)
+          : (typeof field.previewUrl === 'function' ? field.previewUrl(entity) : null)
+        return (
+          <div>
+            <CFormInput
+              type="file"
+              disabled={soloLectura || field.disabled}
+              onChange={(e) => handleChange(field, e.target.files[0] || null)}
+            />
+            {previewUrl && (
+              <div className="mt-2">
+                <img
+                  src={previewUrl}
+                  alt="Preview"
+                  style={{ maxWidth: '150px', maxHeight: '120px', borderRadius: '6px', objectFit: 'cover' }}
+                />
+              </div>
+            )}
+          </div>
         )
+      }
 
       default:
         return (

@@ -1,5 +1,4 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 import './CartaPublicaPage.scss'
 
 const API_BASE = 'http://localhost:9000/api/v1/carta/activa'
@@ -16,6 +15,79 @@ const formatPrice = (n) =>
     currency: 'ARS',
     minimumFractionDigits: 2,
   })
+
+/* ── SVG Icons ──────────────────────────────────── */
+
+const WineGlassIcon = memo(function WineGlassIcon({ className }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 28 28"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M6 3 Q6 14 14 16 Q22 14 22 3" />
+      <line x1="14" y1="16" x2="14" y2="23" />
+      <line x1="9" y1="23" x2="19" y2="23" />
+    </svg>
+  )
+})
+
+const GrapeClusterIcon = memo(function GrapeClusterIcon({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <circle cx="12" cy="9" r="3" />
+      <circle cx="8" cy="13" r="2.5" />
+      <circle cx="16" cy="13" r="2.5" />
+      <circle cx="12" cy="13" r="2.5" />
+      <circle cx="9.5" cy="17" r="2" />
+      <circle cx="14.5" cy="17" r="2" />
+    </svg>
+  )
+})
+
+const CloseIcon = memo(function CloseIcon({ className }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  )
+})
+
+const WarningIcon = memo(function WarningIcon({ className }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 3 L3 21 L21 21 Z" />
+      <line x1="12" y1="10" x2="12" y2="15" />
+      <circle cx="12" cy="18" r="0.5" fill="currentColor" stroke="none" />
+    </svg>
+  )
+})
+
+/* ── Page ───────────────────────────────────────── */
 
 const CartaPublicaPage = () => {
   const [carta, setCarta] = useState(null)
@@ -53,6 +125,10 @@ const CartaPublicaPage = () => {
     fetchCarta()
   }, [fetchCarta])
 
+  const handleSelectItem = useCallback((item) => {
+    setSelectedItem(item)
+  }, [])
+
   const handleCloseModal = useCallback(() => {
     setSelectedItem(null)
   }, [])
@@ -81,19 +157,19 @@ const CartaPublicaPage = () => {
       <Hero nombre={carta.nombre} fechaDesde={carta.fechaDesde} fechaHasta={carta.fechaHasta} />
       <main className="carta-publica__main">
         {categorias.map((categoria) => (
-          <CategoriaCard key={categoria.id} categoria={categoria} onSelect={setSelectedItem} />
+          <CategoriaCard key={categoria.id} categoria={categoria} onSelect={handleSelectItem} />
         ))}
       </main>
       <footer className="carta-publica__footer">
-        <span className="carta-publica__ornament" aria-hidden="true">
-          ❦
-        </span>
+        <WineGlassIcon className="carta-publica__wine-icon" />
         <p>Gracias por su visita</p>
       </footer>
-      <ItemDetailModal item={selectedItem} onClose={handleCloseModal} />
+      {selectedItem ? <CartaItemModal item={selectedItem} onClose={handleCloseModal} /> : null}
     </div>
   )
 }
+
+/* ── Fonts ──────────────────────────────────────── */
 
 const FontsHead = () => (
   <>
@@ -102,25 +178,28 @@ const FontsHead = () => (
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,700&family=Lato:wght@300;400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap"
     />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,700&family=Lato:wght@300;400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap"
     />
   </>
 )
 
+/* ── Hero ───────────────────────────────────────── */
+
 const Hero = memo(function Hero({ nombre, fechaDesde, fechaHasta }) {
   return (
     <header className="carta-publica__hero">
-      <span className="carta-publica__ornament" aria-hidden="true">
-        ❦
-      </span>
+      <WineGlassIcon className="carta-publica__wine-icon" />
       <p className="carta-publica__kicker">Nuestra Carta</p>
-      <h1 className="carta-publica__title">{nombre}</h1>
+      <h1 className="carta-publica__title">Aromas de Viña</h1>
+      {nombre ? <p className="carta-publica__subtitle">{nombre}</p> : null}
       <div className="carta-publica__divider" aria-hidden="true">
-        <span className="carta-publica__divider-glyph">◆</span>
+        <span className="carta-publica__divider-line" />
+        <GrapeClusterIcon className="carta-publica__divider-icon" />
+        <span className="carta-publica__divider-line" />
       </div>
       <p className="carta-publica__dates">
         Vigente del <em>{formatFecha(fechaDesde)}</em> al <em>{formatFecha(fechaHasta)}</em>
@@ -128,6 +207,8 @@ const Hero = memo(function Hero({ nombre, fechaDesde, fechaHasta }) {
     </header>
   )
 })
+
+/* ── Category ───────────────────────────────────── */
 
 const CategoriaCard = memo(function CategoriaCard({ categoria, onSelect }) {
   const productos = categoria.productos ?? []
@@ -145,23 +226,16 @@ const CategoriaCard = memo(function CategoriaCard({ categoria, onSelect }) {
           {categoria.nombre}
         </h2>
         <div className="carta-categoria__rule" aria-hidden="true">
-          <span className="carta-categoria__rule-glyph">· · ·</span>
+          <span className="carta-categoria__rule-line" />
+          <GrapeClusterIcon className="carta-categoria__rule-icon" />
+          <span className="carta-categoria__rule-line" />
         </div>
       </header>
 
       {hasProductos ? (
         <ul className="carta-items">
           {productos.map((producto) => (
-            <CartaItem
-              key={producto.id}
-              item={{
-                id: producto.id,
-                nombre: producto.nombre,
-                descripcion: producto.descripcion,
-                precio: producto.precio,
-              }}
-              onSelect={onSelect}
-            />
+            <CartaItemCard key={producto.id} item={producto} onSelect={onSelect} />
           ))}
         </ul>
       ) : null}
@@ -169,16 +243,7 @@ const CategoriaCard = memo(function CategoriaCard({ categoria, onSelect }) {
       {hasMenus ? (
         <ul className={`carta-items${hasProductos ? ' carta-items--separated' : ''}`}>
           {menus.map((menu) => (
-            <CartaItem
-              key={menu.id}
-              item={{
-                id: menu.id,
-                nombre: menu.nombre,
-                descripcion: menu.descripcion,
-                precio: menu.precio,
-              }}
-              onSelect={onSelect}
-            />
+            <CartaItemCard key={menu.id} item={menu} onSelect={onSelect} />
           ))}
         </ul>
       ) : null}
@@ -186,49 +251,97 @@ const CategoriaCard = memo(function CategoriaCard({ categoria, onSelect }) {
   )
 })
 
-const CartaItem = memo(function CartaItem({ item, onSelect }) {
-  const handleClick = useCallback(() => {
-    onSelect(item)
-  }, [item, onSelect])
+/* ── Item Card ──────────────────────────────────── */
+
+const CartaItemCard = memo(function CartaItemCard({ item, onSelect }) {
+  const imgUrl = item.imagenId ? `http://localhost:9000/api/v1/imagen/${item.imagenId}` : null
+
+  const handleClick = () => onSelect(item)
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      onSelect(item)
+    }
+  }
 
   return (
-    <li className="carta-item">
-      <button type="button" className="carta-item__btn" onClick={handleClick}>
-        <div className="carta-item__info">
-          <h3 className="carta-item__name">{item.nombre}</h3>
-          {item.descripcion ? <p className="carta-item__desc">{item.descripcion}</p> : null}
-        </div>
-        <span className="carta-item__price">{formatPrice(item.precio)}</span>
-      </button>
+    <li
+      className="carta-item-card"
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+    >
+      <div className="carta-item-card__image-col">
+        {imgUrl ? (
+          <img className="carta-item-card__image" src={imgUrl} alt={item.nombre} loading="lazy" />
+        ) : (
+          <div
+            className="carta-item-card__image carta-item-card__image--placeholder"
+            aria-hidden="true"
+          />
+        )}
+      </div>
+      <div className="carta-item-card__body">
+        <h3 className="carta-item-card__name">{item.nombre}</h3>
+        {item.descripcion ? <p className="carta-item-card__desc">{item.descripcion}</p> : null}
+        <span className="carta-item-card__price">{formatPrice(item.precio)}</span>
+      </div>
     </li>
   )
 })
 
-const ItemDetailModal = memo(function ItemDetailModal({ item, onClose }) {
+/* ── Item Modal ──────────────────────────────────── */
+
+const CartaItemModal = memo(function CartaItemModal({ item, onClose }) {
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleEscape)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', handleEscape)
+      document.body.style.overflow = ''
+    }
+  }, [onClose])
+
+  const imgUrl = item.imagenId ? `http://localhost:9000/api/v1/imagen/${item.imagenId}` : null
+
   return (
-    <CModal visible={!!item} onClose={onClose} alignment="center" className="carta-modal">
-      {item ? (
-        <>
-          <CModalHeader onClose={onClose}>
-            <CModalTitle>{item.nombre}</CModalTitle>
-          </CModalHeader>
-          <CModalBody className="carta-modal__body">
-            <div className="carta-modal__image-placeholder" aria-hidden="true">
-              <span>Imagen</span>
-            </div>
-            {item.descripcion ? <p className="carta-modal__desc">{item.descripcion}</p> : null}
-            <p className="carta-modal__price">{formatPrice(item.precio)}</p>
-          </CModalBody>
-          <CModalFooter>
-            <CButton color="secondary" variant="outline" onClick={onClose}>
-              Cerrar
-            </CButton>
-          </CModalFooter>
-        </>
-      ) : null}
-    </CModal>
+    <div className="carta-modal-overlay" onClick={onClose} role="presentation">
+      <div
+        className="carta-modal"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={item.nombre}
+      >
+        <button type="button" className="carta-modal__close" onClick={onClose} aria-label="Cerrar">
+          <CloseIcon />
+        </button>
+
+        {imgUrl ? (
+          <img className="carta-modal__image" src={imgUrl} alt={item.nombre} />
+        ) : (
+          <div className="carta-modal__image carta-modal__image--placeholder" aria-hidden="true">
+            <WineGlassIcon />
+          </div>
+        )}
+
+        <div className="carta-modal__body">
+          <h2 className="carta-modal__name">{item.nombre}</h2>
+          {item.descripcion ? <p className="carta-modal__desc">{item.descripcion}</p> : null}
+          <div className="carta-modal__divider" aria-hidden="true" />
+          <span className="carta-modal__price">{formatPrice(item.precio)}</span>
+        </div>
+      </div>
+    </div>
   )
 })
+
+/* ── Skeleton ───────────────────────────────────── */
 
 const SKELETON_CATS = [1, 2, 3]
 
@@ -239,6 +352,7 @@ const CartaSkeleton = () => (
       <div className="skeleton skeleton--ornament" />
       <div className="skeleton skeleton--kicker" />
       <div className="skeleton skeleton--title" />
+      <div className="skeleton skeleton--subtitle" />
       <div className="skeleton skeleton--dates" />
     </header>
     <main className="carta-publica__main">
@@ -254,13 +368,15 @@ const CartaSkeleton = () => (
   </div>
 )
 
+/* ── Error / Empty ──────────────────────────────── */
+
 const CartaError = memo(function CartaError({ mensaje, onRetry }) {
   return (
     <div className="carta-publica">
       <FontsHead />
       <div className="carta-publica__state">
         <div className="carta-publica__state-icon" aria-hidden="true">
-          ⚠
+          <WarningIcon />
         </div>
         <h2>No pudimos cargar la carta</h2>
         <p>{mensaje}</p>
@@ -277,7 +393,7 @@ const CartaVacia = () => (
     <FontsHead />
     <div className="carta-publica__state">
       <div className="carta-publica__state-icon" aria-hidden="true">
-        🍽
+        <WineGlassIcon />
       </div>
       <h2>No hay carta activa</h2>
       <p>En este momento el restaurante no tiene una carta vigente para mostrar.</p>

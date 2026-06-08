@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   CButton,
   CCard,
@@ -75,19 +75,28 @@ const BotonAgregar = ({ onClick, children }) => (
 
 const MenuForm = ({ modo, entity, onClose, onGuardar }) => {
   const { apiFetch } = useApi()
-
   const [nombre, setNombre] = useState('')
   const [descripcion, setDescripcion] = useState('')
   const [precio, setPrecio] = useState('')
   const [articulosDisponibles, setArticulosDisponibles] = useState([])
   const [detalles, setDetalles] = useState([])
-
+  const [imagenFile, setImagenFile] = useState(null)
   const soloLectura = modo === 'ver'
+  const objectUrlRef = useRef(null)
+
+  useEffect(() => {
+    return () => {
+      if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current)
+    }
+  }, [])
+
+  const existingPreviewUrl = entity?.imagenId
+    ? `http://localhost:9000/api/v1/imagen/${entity.imagenId}`
+    : null
 
   const cargarDatos = async () => {
     const artResp = await apiFetch('http://localhost:9000/api/v1/articulo')
     const articulosData = await artResp.json()
-
     setArticulosDisponibles(
       (Array.isArray(articulosData) ? articulosData : []).map((a) => ({
         value: a.id,
@@ -98,30 +107,30 @@ const MenuForm = ({ modo, entity, onClose, onGuardar }) => {
   }
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     cargarDatos()
   }, [])
 
   useEffect(() => {
     if (entity) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setNombre(entity.nombre || '')
       setDescripcion(entity.descripcion || '')
       setPrecio(entity.precio ?? '')
       setDetalles(entity.detalles || [])
+      setImagenFile(null)
     }
   }, [entity])
+
+  const handleImagenChange = (e) => {
+    const file = e.target.files[0] || null
+    if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current)
+    objectUrlRef.current = file ? URL.createObjectURL(file) : null
+    setImagenFile(file)
+  }
 
   const agregarDetalle = () => {
     setDetalles((prev) => [
       ...prev,
-      {
-        id: '',
-        cantidad: 1,
-        articuloId: '',
-        articuloNombre: '',
-        articuloDescripcion: '',
-      },
+      { id: '', cantidad: 1, articuloId: '', articuloNombre: '', articuloDescripcion: '' },
     ])
   }
 
@@ -150,17 +159,21 @@ const MenuForm = ({ modo, entity, onClose, onGuardar }) => {
   }
 
   const guardar = () => {
-    onGuardar({
+    const detallesData = detalles.filter((d) => d.articuloId)
+
+    const payload = {
       nombre,
       descripcion,
       precio: Number(precio),
-      detalles: detalles
-        .filter((d) => d.articuloId)
-        .map((d) => ({
-          cantidad: d.cantidad,
-          articuloId: d.articuloId,
-        })),
+      imagen: imagenFile,
+    }
+
+    detallesData.forEach((d, i) => {
+      payload[`detalles[${i}].articuloId`] = d.articuloId
+      payload[`detalles[${i}].cantidad`] = d.cantidad
     })
+
+    onGuardar(payload)
   }
 
   return (
@@ -170,7 +183,6 @@ const MenuForm = ({ modo, entity, onClose, onGuardar }) => {
           {modo === 'crear' ? 'Nuevo Menú' : modo === 'editar' ? 'Editar Menú' : 'Detalle del Menú'}
         </strong>
       </CCardHeader>
-
       <CCardBody>
         <div className="row mb-3">
           <div className="col-md-8">
@@ -195,7 +207,6 @@ const MenuForm = ({ modo, entity, onClose, onGuardar }) => {
             />
           </div>
         </div>
-
         <div className="mb-3">
           <CFormLabel>Descripción</CFormLabel>
           <CFormTextarea
@@ -206,13 +217,41 @@ const MenuForm = ({ modo, entity, onClose, onGuardar }) => {
             placeholder="Ej: Milanesa con huevo frito y perejil"
           />
         </div>
-
+        <div className="mb-3">
+          <CFormLabel>Imagen del Menú</CFormLabel>
+          <CFormInput type="file" disabled={soloLectura} onChange={handleImagenChange} />
+          {imagenFile && (
+            <div className="mt-2">
+              <img
+                src={objectUrlRef.current}
+                alt="Preview"
+                style={{
+                  maxWidth: '150px',
+                  maxHeight: '120px',
+                  borderRadius: '6px',
+                  objectFit: 'cover',
+                }}
+              />
+            </div>
+          )}
+          {!imagenFile && existingPreviewUrl && (
+            <div className="mt-2">
+              <img
+                src={existingPreviewUrl}
+                alt="Imagen del menú"
+                style={{
+                  maxWidth: '150px',
+                  maxHeight: '120px',
+                  borderRadius: '6px',
+                  objectFit: 'cover',
+                }}
+              />
+            </div>
+          )}
+        </div>
         <div
           className="d-flex align-items-center gap-2 mb-3"
-          style={{
-            borderTop: '2px solid var(--cui-border-color)',
-            paddingTop: '1rem',
-          }}
+          style={{ borderTop: '2px solid var(--cui-border-color)', paddingTop: '1rem' }}
         >
           <span className="fw-semibold fs-6" style={{ color: 'var(--cui-body-color)' }}>
             Artículos
@@ -221,16 +260,11 @@ const MenuForm = ({ modo, entity, onClose, onGuardar }) => {
             {detalles.length}
           </CBadge>
         </div>
-
         {detalles.length > 0 && (
           <CTable
             small
             bordered
-            style={{
-              fontSize: '14px',
-              marginBottom: '0.75rem',
-              background: 'var(--cui-body-bg)',
-            }}
+            style={{ fontSize: '14px', marginBottom: '0.75rem', background: 'var(--cui-body-bg)' }}
           >
             <CTableHead>
               <CTableRow>
@@ -241,7 +275,6 @@ const MenuForm = ({ modo, entity, onClose, onGuardar }) => {
                 {!soloLectura && <CTableHeaderCell style={{ width: '1%' }} />}
               </CTableRow>
             </CTableHead>
-
             <CTableBody>
               {detalles.map((detalle, index) => (
                 <CTableRow key={index}>
@@ -257,7 +290,6 @@ const MenuForm = ({ modo, entity, onClose, onGuardar }) => {
                       styles={selectStyles}
                     />
                   </CTableDataCell>
-
                   <CTableDataCell>
                     <CFormInput
                       type="number"
@@ -268,7 +300,6 @@ const MenuForm = ({ modo, entity, onClose, onGuardar }) => {
                       style={{ minWidth: '90px' }}
                     />
                   </CTableDataCell>
-
                   {!soloLectura && (
                     <CTableDataCell className="text-center" style={{ verticalAlign: 'middle' }}>
                       <BotonEliminar
@@ -282,10 +313,8 @@ const MenuForm = ({ modo, entity, onClose, onGuardar }) => {
             </CTableBody>
           </CTable>
         )}
-
         {!soloLectura && <BotonAgregar onClick={agregarDetalle}>Agregar artículo</BotonAgregar>}
       </CCardBody>
-
       <CCardFooter className="d-flex justify-content-end gap-2">
         <CButton color="secondary" onClick={onClose}>
           Cancelar
