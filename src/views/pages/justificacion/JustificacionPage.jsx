@@ -12,6 +12,7 @@ import EntityForm from './JustificacionForm'
 import ErrorModal from '@/components/ErrorModal'
 import ConfirmModal from '@/components/ConfirmModal'
 import { useApi } from '@/hooks/useApi'
+import { API_URL } from '@/config'
 
 const ActualPage = () => {
   const { apiFetch } = useApi()
@@ -43,7 +44,7 @@ const ActualPage = () => {
 
   const cargarDatos = async (page) => {
     try {
-      const response = await apiFetch(`http://localhost:9000/api/v1/${endpoint}/paged?page=${page}&size=${tamanioPagina}`)
+      const response = await apiFetch(`${API_URL}/api/v1/${endpoint}/paged?page=${page}&size=${tamanioPagina}`)
       const data = await response.json()
       
       if (!response.ok) {
@@ -91,7 +92,7 @@ const ActualPage = () => {
     if (!paraEliminar) return
 
     try {
-      const response = await apiFetch(`http://localhost:9000/api/v1/${endpoint}/${paraEliminar.id}`, {
+      const response = await apiFetch(`${API_URL}/api/v1/${endpoint}/${paraEliminar.id}`, {
         method: 'DELETE',
       })
 
@@ -111,9 +112,9 @@ const ActualPage = () => {
 
   const guardar = async (payload) => {
       try {
-        const url = modo === 'crear' 
-          ? `http://localhost:9000/api/v1/${endpoint}` 
-          : `http://localhost:9000/api/v1/${endpoint}/${seleccionado.id}`
+        const url = modo === 'crear'
+          ? `${API_URL}/api/v1/${endpoint}`
+          : `${API_URL}/api/v1/${endpoint}/${seleccionado.id}`
         
         const metodo = modo === 'crear' ? 'POST' : 'PUT'
 

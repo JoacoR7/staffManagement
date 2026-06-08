@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import GenericPage from '../../components/generic/GenericPage'
 import { useApi } from '../../../hooks/useApi'
+import { API_URL } from '@/config'
 
 const LocalidadPage = () => {
   const { apiFetch } = useApi()
@@ -15,7 +16,7 @@ const LocalidadPage = () => {
 
   const cargarPaises = async () => {
     try {
-      const response = await apiFetch('http://localhost:9000/api/v1/pais')
+      const response = await apiFetch(`${API_URL}/api/v1/pais`)
 
       if (!response.ok) return
 
@@ -39,7 +40,7 @@ const LocalidadPage = () => {
         return []
       }
 
-      const response = await apiFetch(`http://localhost:9000/api/v1/provincia/pais/${paisId}`)
+      const response = await apiFetch(`${API_URL}/api/v1/provincia/pais/${paisId}`)
 
       if (!response.ok) return []
 
@@ -67,7 +68,7 @@ const LocalidadPage = () => {
       }
 
       const response = await apiFetch(
-        `http://localhost:9000/api/v1/departamento/provincia/${provinciaId}`,
+        `${API_URL}/api/v1/departamento/provincia/${provinciaId}`,
       )
 
       if (!response.ok) return []
@@ -164,7 +165,7 @@ const LocalidadPage = () => {
 
   return (
     <GenericPage
-      apiBase="http://localhost:9000/api/v1/localidad"
+      apiBase={`${API_URL}/api/v1/localidad`}
       tituloLista="Lista de Localidades"
       titulos={{
         crear: 'Nueva Localidad',

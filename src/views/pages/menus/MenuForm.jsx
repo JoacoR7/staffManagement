@@ -20,6 +20,7 @@ import CIcon from '@coreui/icons-react'
 import { cilTrash, cilPlus } from '@coreui/icons'
 import Select from 'react-select'
 import { useApi } from '@/hooks/useApi'
+import { API_URL } from '@/config'
 
 const selectStyles = {
   control: (base) => ({
@@ -91,11 +92,11 @@ const MenuForm = ({ modo, entity, onClose, onGuardar }) => {
   }, [])
 
   const existingPreviewUrl = entity?.imagenId
-    ? `http://localhost:9000/api/v1/imagen/${entity.imagenId}`
+    ? `${API_URL}/api/v1/imagen/${entity.imagenId}`
     : null
 
   const cargarDatos = async () => {
-    const artResp = await apiFetch('http://localhost:9000/api/v1/articulo')
+    const artResp = await apiFetch(`${API_URL}/api/v1/articulo`)
     const articulosData = await artResp.json()
     setArticulosDisponibles(
       (Array.isArray(articulosData) ? articulosData : []).map((a) => ({

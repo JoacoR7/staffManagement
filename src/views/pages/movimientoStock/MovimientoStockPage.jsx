@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import GenericPage from '../../components/generic/GenericPage'
+import { API_URL } from '@/config'
 
 const MovimientoStockPage = () => {
   const [stocks, setStocks] = useState([])
@@ -13,7 +14,7 @@ const MovimientoStockPage = () => {
       const token = localStorage.getItem('token')
 
       const response = await fetch(
-        'http://localhost:9000/api/v1/articulo',
+        `${API_URL}/api/v1/articulo`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -47,7 +48,7 @@ const MovimientoStockPage = () => {
 
   return (
     <GenericPage
-      apiBase="http://localhost:9000/api/v1/movimiento-stock"
+      apiBase={`${API_URL}/api/v1/movimiento-stock`}
       tituloLista="Lista de movimientos de stock"
       titulos={{
         crear: 'Nuevo movimiento de stock',
