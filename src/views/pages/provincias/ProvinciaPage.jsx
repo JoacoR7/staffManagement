@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import GenericPage from '../../components/generic/GenericPage'
 import { useApi } from '../../../hooks/useApi'
+import { API_URL } from '@/config'
 const ProvinciaPage = () => {
   const { apiFetch } = useApi()
 
@@ -12,7 +13,7 @@ const ProvinciaPage = () => {
 
   const cargarPaises = async () => {
     try {
-      const response = await apiFetch('http://localhost:9000/api/v1/pais')
+      const response = await apiFetch(`${API_URL}/api/v1/pais`)
 
       if (!response.ok) return
 
@@ -48,7 +49,7 @@ const ProvinciaPage = () => {
 
   return (
     <GenericPage
-      apiBase="http://localhost:9000/api/v1/provincia"
+      apiBase={`${API_URL}/api/v1/provincia`}
       tituloLista="Lista de Provincias"
       titulos={{
         crear: 'Nueva Provincia',

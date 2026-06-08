@@ -5,6 +5,7 @@ import { cilStar } from '@coreui/icons'
 import GenericPage from '../../components/generic/GenericPage'
 import CartaForm from './CartaForm'
 import { useApi } from '@/hooks/useApi'
+import { API_URL } from '@/config'
 
 const formatFecha = (iso) => {
   if (!iso) return ''
@@ -16,7 +17,7 @@ const CartaPage = () => {
   const { apiFetch } = useApi()
 
   const cargarDetalle = async (item) => {
-    const response = await apiFetch(`http://localhost:9000/api/v1/carta/${item.id}`)
+    const response = await apiFetch(`${API_URL}/api/v1/carta/${item.id}`)
 
     if (!response.ok) {
       throw new Error('Error obteniendo detalle de la carta')
@@ -27,10 +28,10 @@ const CartaPage = () => {
 
   return (
     <GenericPage
-      apiBase="http://localhost:9000/api/v1/carta"
-      apiCrear="http://localhost:9000/api/v1/carta/crear"
-      apiEditar={'http://localhost:9000/api/v1/carta/editar'}
-      apiList="http://localhost:9000/api/v1/carta/listado"
+      apiBase={`${API_URL}/api/v1/carta`}
+      apiCrear={`${API_URL}/api/v1/carta/crear`}
+      apiEditar={`${API_URL}/api/v1/carta/editar`}
+      apiList={`${API_URL}/api/v1/carta/listado`}
       cargarDetalle={cargarDetalle}
       tituloLista="Lista de Cartas"
       titulos={{
@@ -75,7 +76,7 @@ const CartaPage = () => {
           condition: (item) => !item.activo,
           onClick: async (item) => {
             const response = await apiFetch(
-              `http://localhost:9000/api/v1/carta/${item.id}/activar`,
+              `${API_URL}/api/v1/carta/${item.id}/activar`,
               { method: 'PUT' },
             )
             if (!response.ok) {

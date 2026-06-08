@@ -1,5 +1,6 @@
 import React from 'react'
 import GenericPage from '../../components/generic/GenericPage'
+import { API_URL } from '@/config'
 
 const PaisPage = () => {
   const columns = [
@@ -27,7 +28,7 @@ const PaisPage = () => {
 
   return (
     <GenericPage
-      apiBase="http://localhost:9000/api/v1/pais"
+      apiBase={`${API_URL}/api/v1/pais`}
       tituloLista="Lista de Países"
       titulos={titulos}
       columns={columns}
