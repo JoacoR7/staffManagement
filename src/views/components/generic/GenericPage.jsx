@@ -233,7 +233,7 @@ const GenericPage = ({
       if (multipart) {
         const formData = new FormData()
         fields
-          .filter((f) => f.type === 'file')
+          .filter((f) => f.type === 'file' || f.type === 'image')
           .forEach((field) => {
             if (payloadTransformado[field.key] instanceof File) {
               formData.append(field.key, payloadTransformado[field.key])

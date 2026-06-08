@@ -28,6 +28,7 @@ const MenuPage = () => {
       apiEditar="http://localhost:9000/api/v1/menu/editar"
       apiList="http://localhost:9000/api/v1/menu/listado"
       cargarDetalle={cargarDetalle}
+      multipart={true}
       tituloLista="Lista de Menús"
       titulos={{
         crear: 'Nuevo Menú',

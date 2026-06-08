@@ -34,10 +34,12 @@ const ArticulosPage = () => {
     }
   }
 
-
   return (
     <GenericPage
       apiBase="http://localhost:9000/api/v1/articulo"
+      apiCrear="http://localhost:9000/api/v1/articulo/crear"
+      apiEditar="http://localhost:9000/api/v1/articulo/editar"
+      multipart={true}
       tituloLista="Lista de Artículos"
       titulos={{
         crear: 'Nuevo Artículo',
@@ -55,7 +57,6 @@ const ArticulosPage = () => {
           label: 'Stock Actual',
           render: (stocks) => {
             const stockActivo = stocks?.find((s) => !s.eliminado)
-
             return stockActivo
               ? stockActivo.cantidadActual
               : 'Sin stock'
@@ -66,7 +67,6 @@ const ArticulosPage = () => {
           label: 'Stock Mínimo',
           render: (stocks) => {
             const stockActivo = stocks?.find((s) => !s.eliminado)
-
             return stockActivo
               ? stockActivo.minimo
               : '-'
@@ -103,8 +103,17 @@ const ArticulosPage = () => {
           key: 'unidadDeMedida',
           label: 'Unidad de Medida',
           type: 'select',
+          rawValue: true,
           required: true,
           options: unidades,
+        },
+        {
+          key: 'imagen',
+          label: 'Imagen',
+          type: 'file',
+          previewUrl: (entity) => entity?.imagen?.id
+            ? `http://localhost:9000/api/v1/imagen/${entity.imagen.id}`
+            : null,
         },
       ]}
       deleteMessage={(item) => (
