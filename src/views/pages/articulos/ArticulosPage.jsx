@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import GenericPage from '../../components/generic/GenericPage'
+import { API_URL } from '@/config'
 
 const ArticulosPage = () => {
   const [unidades, setUnidades] = useState([])
@@ -13,7 +14,7 @@ const ArticulosPage = () => {
       const token = localStorage.getItem('token')
       console.log(token)
       const response = await fetch(
-        'http://localhost:9000/api/v1/unidadDeMedida',
+        `${API_URL}/api/v1/unidadDeMedida`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -37,9 +38,9 @@ const ArticulosPage = () => {
 
   return (
     <GenericPage
-      apiBase="http://localhost:9000/api/v1/articulo"
-      apiCrear="http://localhost:9000/api/v1/articulo/crear"
-      apiEditar="http://localhost:9000/api/v1/articulo/editar"
+      apiBase={`${API_URL}/api/v1/articulo`}
+      apiCrear={`${API_URL}/api/v1/articulo/crear`}
+      apiEditar={`${API_URL}/api/v1/articulo/editar`}
       multipart={true}
       tituloLista="Lista de Artículos"
       titulos={{
@@ -113,7 +114,7 @@ const ArticulosPage = () => {
           label: 'Imagen',
           type: 'file',
           previewUrl: (entity) => entity?.imagen?.id
-            ? `http://localhost:9000/api/v1/imagen/${entity.imagen.id}`
+            ? `${API_URL}/api/v1/imagen/${entity.imagen.id}`
             : null,
         },
       ]}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import GenericPage from '../../components/generic/GenericPage'
+import { API_URL } from '@/config'
 
 const DireccionPage = () => {
   const [paises, setPaises] = useState([])
@@ -15,7 +16,7 @@ const DireccionPage = () => {
     try {
       const token = localStorage.getItem('token')
       const response = await fetch(
-        'http://localhost:9000/api/v1/pais',
+        `${API_URL}/api/v1/pais`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -41,7 +42,7 @@ const DireccionPage = () => {
     try {
       const token = localStorage.getItem('token')
       const response = await fetch(
-        `http://localhost:9000/api/v1/provincia/pais/${paisId}`,
+        `${API_URL}/api/v1/provincia/pais/${paisId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       )
       const data = await response.json()
@@ -60,7 +61,7 @@ const DireccionPage = () => {
     try {
       const token = localStorage.getItem('token')
       const response = await fetch(
-        `http://localhost:9000/api/v1/departamento/provincia/${provinciaId}`,
+        `${API_URL}/api/v1/departamento/provincia/${provinciaId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       )
       const data = await response.json()
@@ -78,7 +79,7 @@ const DireccionPage = () => {
     try {
       const token = localStorage.getItem('token')
       const response = await fetch(
-        `http://localhost:9000/api/v1/localidad/departamento/${departamentoId}`,
+        `${API_URL}/api/v1/localidad/departamento/${departamentoId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       )
       const data = await response.json()
@@ -217,7 +218,7 @@ const DireccionPage = () => {
 
   return (
     <GenericPage
-      apiBase="http://localhost:9000/api/v1/direccion"
+      apiBase={`${API_URL}/api/v1/direccion`}
       tituloLista="Lista de Direcciones"
       titulos={{
         crear: 'Nueva Dirección',

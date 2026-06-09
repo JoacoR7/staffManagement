@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import GenericPage from '../../components/generic/GenericPage'
 import { useApi } from '@/hooks/useApi'
+import { API_URL } from '@/config'
 
 const ClientePage = () => {
   const { apiFetch } = useApi()
   const [direcciones, setDirecciones] = useState([])
 
   useEffect(() => {
-    apiFetch('http://localhost:9000/api/v1/direccion')
+    apiFetch(`${API_URL}/api/v1/direccion`)
       .then((res) => res.json())
       .then((data) => {
         const lista = Array.isArray(data) ? data : data.content || []
@@ -23,10 +24,10 @@ const ClientePage = () => {
 
   return (
     <GenericPage
-      apiBase="http://localhost:9000/api/v1/cliente"
-      apiCrear="http://localhost:9000/api/v1/cliente/crear"
+      apiBase={`${API_URL}/api/v1/cliente`}
+      apiCrear={`${API_URL}/api/v1/cliente/crear`}
       cargarDetalle={async (item) => {
-        const res = await apiFetch(`http://localhost:9000/api/v1/cliente/${item.id}`)
+        const res = await apiFetch(`${API_URL}/api/v1/cliente/${item.id}`)
         const data = await res.json()
         return { ...data, direccionId: data.direccionId }
       }}

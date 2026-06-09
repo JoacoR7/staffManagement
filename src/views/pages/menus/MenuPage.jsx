@@ -2,6 +2,7 @@ import React from 'react'
 import GenericPage from '../../components/generic/GenericPage'
 import MenuForm from './MenuForm'
 import { useApi } from '@/hooks/useApi'
+import { API_URL } from '@/config'
 
 const truncate = (text, max = 50) => {
   if (!text) return ''
@@ -12,7 +13,7 @@ const MenuPage = () => {
   const { apiFetch } = useApi()
 
   const cargarDetalle = async (item) => {
-    const response = await apiFetch(`http://localhost:9000/api/v1/menu/${item.id}`)
+    const response = await apiFetch(`${API_URL}/api/v1/menu/${item.id}`)
 
     if (!response.ok) {
       throw new Error('Error obteniendo detalle del menú')
@@ -23,10 +24,10 @@ const MenuPage = () => {
 
   return (
     <GenericPage
-      apiBase="http://localhost:9000/api/v1/menu"
-      apiCrear="http://localhost:9000/api/v1/menu/crear"
-      apiEditar="http://localhost:9000/api/v1/menu/editar"
-      apiList="http://localhost:9000/api/v1/menu/listado"
+      apiBase={`${API_URL}/api/v1/menu`}
+      apiCrear={`${API_URL}/api/v1/menu/crear`}
+      apiEditar={`${API_URL}/api/v1/menu/editar`}
+      apiList={`${API_URL}/api/v1/menu/listado`}
       cargarDetalle={cargarDetalle}
       multipart={true}
       tituloLista="Lista de Menús"

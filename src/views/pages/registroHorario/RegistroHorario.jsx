@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import GenericPage from '../../components/generic/GenericPage'
 import { useApi } from '@/hooks/useApi'
+import { API_URL } from '@/config'
 import {
   CModal,
   CModalHeader,
@@ -31,7 +32,7 @@ const RegistroHorarioPage = () => {
   const [cargandoJustificacion, setCargandoJustificacion] = useState(false)
 
   useEffect(() => {
-    apiFetch('http://localhost:9000/api/v1/empleado')
+    apiFetch(`${API_URL}/api/v1/empleado`)
       .then((res) => res.json())
       .then((data) =>
         setEmpleados(data.map((e) => ({ value: e.id, label: `${e.nombre} ${e.apellido}` }))),
@@ -42,7 +43,7 @@ const RegistroHorarioPage = () => {
   const descargarArchivo = async () => {
     try {
       const res = await apiFetch(
-        `http://localhost:9000/api/v1/documentacion/files/${justificacion.documentacion.id}`,
+        `${API_URL}/api/v1/documentacion/files/${justificacion.documentacion.id}`,
       )
       const contentDisposition = res.headers.get('Content-Disposition')
       const filename = contentDisposition?.split('filename="')[1]?.replace('"', '')
@@ -64,7 +65,7 @@ const RegistroHorarioPage = () => {
     setCargandoJustificacion(true)
     try {
       const res = await apiFetch(
-        `http://localhost:9000/api/v1/justificacion/registroHorario/${item.id}`,
+        `${API_URL}/api/v1/justificacion/registroHorario/${item.id}`,
       )
       const data = await res.json()
       setJustificacion(data)
@@ -104,7 +105,7 @@ const RegistroHorarioPage = () => {
       formData.append('tipoDocumentacion', tipoDocumentacion)
       if (archivo) formData.append('archivo', archivo)
 
-      await apiFetch('http://localhost:9000/api/v1/justificacion/crear', {
+      await apiFetch(`${API_URL}/api/v1/justificacion/crear`, {
         method: 'POST',
         body: formData,
       })
@@ -119,7 +120,7 @@ const RegistroHorarioPage = () => {
   return (
     <>
       <GenericPage
-        apiBase="http://localhost:9000/api/v1/registroHorario"
+        apiBase={`${API_URL}/api/v1/registroHorario`}
         tituloLista="Lista de ingresos y egresos"
         titulos={{
           editar: 'Modificar Registro',

@@ -27,6 +27,7 @@ import {
 } from '@coreui/icons'
 import Select, { components } from 'react-select'
 import { useApi } from '@/hooks/useApi'
+import { API_URL } from '@/config'
 
 const selectStyles = {
   control: (base) => ({
@@ -177,9 +178,9 @@ const CartaForm = ({ modo, entity, onClose, onGuardar }) => {
 
   const cargarDatos = useCallback(async () => {
     const [catResult, artResult, menuResult] = await Promise.allSettled([
-      apiFetch('http://localhost:9000/api/v1/categoria'),
-      apiFetch('http://localhost:9000/api/v1/articulo'),
-      apiFetch('http://localhost:9000/api/v1/menu/listado-simple'),
+      apiFetch(`${API_URL}/api/v1/categoria`),
+      apiFetch(`${API_URL}/api/v1/articulo`),
+      apiFetch(`${API_URL}/api/v1/menu/listado-simple`),
     ])
 
     if (catResult.status === 'fulfilled') {

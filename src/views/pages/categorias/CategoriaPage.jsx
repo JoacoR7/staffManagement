@@ -1,5 +1,6 @@
 import React from 'react'
 import GenericPage from '../../components/generic/GenericPage'
+import { API_URL } from '@/config'
 
 const CategoriaPage = () => {
   const fields = [
@@ -14,7 +15,7 @@ const CategoriaPage = () => {
 
   return (
     <GenericPage
-      apiBase="http://localhost:9000/api/v1/categoria"
+      apiBase={`${API_URL}/api/v1/categoria`}
       tituloLista="Lista de Categorías"
       titulos={{
         crear: 'Nueva Categoría',

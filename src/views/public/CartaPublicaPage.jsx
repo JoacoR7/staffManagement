@@ -1,7 +1,8 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { API_URL } from '@/config'
 import './CartaPublicaPage.scss'
 
-const API_BASE = 'http://localhost:9000/api/v1/carta/activa'
+const API_BASE = `${API_URL}/api/v1/carta/activa`
 
 const formatFecha = (iso) => {
   if (!iso) return ''
@@ -254,7 +255,7 @@ const CategoriaCard = memo(function CategoriaCard({ categoria, onSelect }) {
 /* ── Item Card ──────────────────────────────────── */
 
 const CartaItemCard = memo(function CartaItemCard({ item, onSelect }) {
-  const imgUrl = item.imagenId ? `http://localhost:9000/api/v1/imagen/${item.imagenId}` : null
+  const imgUrl = item.imagenId ? `${API_URL}/api/v1/imagen/${item.imagenId}` : null
 
   const handleClick = () => onSelect(item)
 
@@ -307,7 +308,7 @@ const CartaItemModal = memo(function CartaItemModal({ item, onClose }) {
     }
   }, [onClose])
 
-  const imgUrl = item.imagenId ? `http://localhost:9000/api/v1/imagen/${item.imagenId}` : null
+  const imgUrl = item.imagenId ? `${API_URL}/api/v1/imagen/${item.imagenId}` : null
 
   return (
     <div className="carta-modal-overlay" onClick={onClose} role="presentation">

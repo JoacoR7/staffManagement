@@ -28,6 +28,7 @@ import {
   cilStar,
   cilBasket,
   cilPeople,
+  cilBuilding,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -189,6 +190,18 @@ const _nav = [
         component: CNavItem,
         name: 'Recibos de sueldo',
         to: '/recibos-de-sueldo/listar',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Empresa',
+    icon: <CIcon icon={cilBuilding} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Empresa',
+        to: '/empresa/listar',
       },
     ],
   },

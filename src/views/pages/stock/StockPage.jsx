@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import GenericPage from '../../components/generic/GenericPage'
+import { API_URL } from '@/config'
 
 const StockPage = () => {
   const [unidades, setUnidades] = useState([])
@@ -12,7 +13,7 @@ const StockPage = () => {
     try {
       const token = localStorage.getItem('token')
       const response = await fetch(
-        'http://localhost:9000/api/v1/articulo',
+        `${API_URL}/api/v1/articulo`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -35,7 +36,7 @@ const StockPage = () => {
   }
   return (
     <GenericPage
-      apiBase="http://localhost:9000/api/v1/stock"
+      apiBase={`${API_URL}/api/v1/stock`}
       tituloLista="Lista de stock de productos"
       titulos={{
         crear: 'Nuevo stock de producto',
