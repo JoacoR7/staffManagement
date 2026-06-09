@@ -29,7 +29,22 @@ const ClientePage = () => {
       cargarDetalle={async (item) => {
         const res = await apiFetch(`${API_URL}/api/v1/cliente/${item.id}`)
         const data = await res.json()
-        return { ...data, direccionId: data.direccionId }
+
+        // Extraer el primer contacto telefónico
+        const contacto = data.contacto?.[0] ?? {}
+
+        return {
+          ...data,
+          // Campos del contacto aplanados
+          tipoContacto: contacto.tipoContacto ?? '',
+          tipoTelefono: contacto.tipoTelefono ?? '',
+          contactoTelefono: contacto.telefono ?? '',
+          observacion: contacto.observacion ?? '',
+          // Dirección
+          direccionId: data.direccion?.id ?? '',
+          // esTurista: tiene direccionEstadia y no tiene direccion
+          esTurista: !!data.direccionEstadia && !data.direccion,
+        }
       }}
       tituloLista="Lista de clientes"
       titulos={{
