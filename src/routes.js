@@ -109,6 +109,9 @@ const CategoriaPage = React.lazy(() => import('./views/pages/categorias/Categori
 const CartaPage = React.lazy(() => import('./views/pages/cartas/CartaPage'))
 const MenuPage = React.lazy(() => import('./views/pages/menus/MenuPage'))
 
+// Cliente
+const ClientePage = React.lazy(() => import('./views/pages/cliente/ClientePage'))
+
 /**
  * Array of route configuration objects
  *
@@ -190,6 +193,7 @@ export const routes = [
   { path: '/cartas/listar', name: 'Carta', element: CartaPage },
   { path: '/menus/listar', name: 'Menú', element: MenuPage },
   { path: '/direccion/listar', name: 'Direcciones', element: DireccionPage },
+  { path: '/cliente/listar', name: 'Clientes', element: ClientePage },
 ]
 
 export default routes

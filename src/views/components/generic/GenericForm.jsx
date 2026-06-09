@@ -45,6 +45,10 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
     const nuevosErrores = {}
 
     fields.forEach((field) => {
+      if (typeof field.visible === 'function' && !field.visible(formData)) {
+        return
+      }
+
       if (!field.required) return
 
       const value = formData[field.key]
@@ -52,8 +56,7 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
       const vacio =
         value === undefined ||
         value === null ||
-        value === '' ||
-        (field.type === 'checkbox' && value === false)
+        value === ''
 
       if (vacio) {
         nuevosErrores[field.key] = 'Este campo es obligatorio'
@@ -254,7 +257,14 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
       </CCardHeader>
 
       <CCardBody>
-        {fields.map((field) => (
+        {fields
+        .filter((field) => {
+          if (typeof field.visible === 'function') {
+            return field.visible(formData)
+          }
+          return true
+        })
+        .map((field) => (
           <div className="mb-3" key={field.key}>
             {field.type === 'checkbox' ? (
               <CFormCheck

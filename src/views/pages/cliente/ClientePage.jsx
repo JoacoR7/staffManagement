@@ -30,7 +30,6 @@ const ClientePage = () => {
         const data = await res.json()
         return { ...data, direccionId: data.direccionId }
       }}
-      multipart={true}
       tituloLista="Lista de clientes"
       titulos={{
         crear: 'Nuevo Cliente',
@@ -42,11 +41,6 @@ const ClientePage = () => {
         { key: 'apellido', label: 'Apellido' },
         { key: 'tipoDocumentacion', label: 'Tipo doc.' },
         { key: 'dni', label: 'DNI' },
-        {
-          key: 'email',
-          label: 'Email',
-          render: (_, item) => item.contacto?.find((c) => c.email)?.email ?? '-',
-        },
       ]}
       fields={[
         { key: 'nombre', label: 'Nombre', required: true },
@@ -64,7 +58,6 @@ const ClientePage = () => {
         },
         { key: 'dni', label: 'DNI', required: true },
         { key: 'fechaNacimiento', label: 'Fecha de nacimiento', type: 'date', required: true },
-        { key: 'foto', label: 'Foto de perfil', type: 'file' },
         {
           key: 'tipoContacto',
           label: 'Tipo de contacto',
@@ -77,7 +70,6 @@ const ClientePage = () => {
             { value: 'EMPRESA', label: 'Empresa' },
           ],
         },
-        { key: 'email', label: 'Email', type: 'email', required: true },
         {
           key: 'tipoTelefono',
           label: 'Tipo de teléfono',
@@ -91,16 +83,10 @@ const ClientePage = () => {
         },
         { key: 'contactoTelefono', label: 'Teléfono', required: true },
         { key: 'observacion', label: 'Observación', type: 'textarea' },
-        { key: 'password', label: 'Contraseña', type: 'password', required: true },
         {
-          key: 'rol',
-          label: 'Rol',
-          type: 'select',
-          rawValue: true,
-          required: true,
-          options: [
-            { value: 'CLIENTE', label: 'Cliente' },
-          ],
+          key: 'esTurista',
+          label: '¿Es turista?',
+          type: 'checkbox',
         },
         {
           key: 'direccionId',
@@ -109,6 +95,14 @@ const ClientePage = () => {
           rawValue: true,
           required: true,
           options: direcciones,
+          visible: (values) => !values.esTurista,
+        },
+        {
+          key: 'direccionEstadia',
+          label: 'Dirección',
+          required: true,
+          placeholder: 'Ej: Hotel San Martín',
+          visible: (values) => values.esTurista,
         },
       ]}
       deleteMessage={(item) => (
