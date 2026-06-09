@@ -26,6 +26,7 @@ const ClientePage = () => {
     <GenericPage
       apiBase={`${API_URL}/api/v1/cliente`}
       apiCrear={`${API_URL}/api/v1/cliente/crear`}
+      apiEditar={`${API_URL}/api/v1/cliente/editar`}
       cargarDetalle={async (item) => {
         const res = await apiFetch(`${API_URL}/api/v1/cliente/${item.id}`)
         const data = await res.json()
