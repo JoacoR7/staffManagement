@@ -208,6 +208,32 @@ const GenericForm = ({ modo, entity, onClose, onGuardar, titulos, fields }) => {
             onChange={(e) => handleChange(field, e.target.checked)}
           />
         )
+      case 'counter':
+        return (
+          <div className="d-flex align-items-center gap-2">
+            <CButton
+              type="button"
+              color="secondary"
+              disabled={soloLectura || value <= (field.min ?? 0)}
+              onClick={() => handleChange(field, Number(value || 0) - 1)}
+            >
+              -
+            </CButton>
+
+            <div style={{ minWidth: 40, textAlign: 'center' }}>
+              {value || 0}
+            </div>
+
+            <CButton
+              type="button"
+              color="secondary"
+              disabled={soloLectura || (field.max !== undefined && value >= field.max)}
+              onClick={() => handleChange(field, Number(value || 0) + 1)}
+            >
+              +
+            </CButton>
+          </div>
+        )
 
       case 'file':
       case 'image': {

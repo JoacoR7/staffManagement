@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import GenericPage from '../../components/generic/GenericPage'
 import { API_URL } from '@/config'
 
-const ReseniasPage = () => {
+const HistorialVisitasRestaurantPage = () => {
   const [clientes, setClientes] = useState([])
 
   useEffect(() => {
@@ -37,12 +37,12 @@ const ReseniasPage = () => {
 
   return (
     <GenericPage
-      apiBase={`${API_URL}/api/v1/resenia`}
-      tituloLista="Lista de Reseñas"
+      apiBase={`${API_URL}/api/v1/historial-visitas-restaurant`}
+      tituloLista="Lista de Historial de Visitas"
       titulos={{
-        crear: 'Nueva Reseña',
-        editar: 'Modificar Reseña',
-        ver: 'Detalle de la Reseña',
+        crear: 'Nueva Visita',
+        editar: 'Modificar Visita',
+        ver: 'Detalle de la Visita',
       }}
       columns={[
         {
@@ -52,28 +52,18 @@ const ReseniasPage = () => {
             cliente ? `${cliente.nombre} ${cliente.apellido}` : '-',
         },
         {
-        key: 'fechaResenia',
-        label: 'Fecha',
-        render: (value) =>
-            value
-            ? new Date(value).toLocaleString('es-AR', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false,
-                })
-            : '-',
-        }
+        key: 'cantidadVisita',
+        label: 'Cantidad de visitas',
+        render: (value) => value ?? 0,
+        },
       ]}
       fields={[
         {
-          key: 'observacion',
-          label: 'Observación',
-          placeholder: 'Ej: Muy buena atención, volveré pronto',
-          required: true,
-          type: 'textarea',
+          key: 'cantidadVisita',
+          label: 'Cantidad de Visitas',
+          type: 'counter',
+          defaultValue: 0,
+          min: 0,
         },
         {
           key: 'cliente',
@@ -85,13 +75,13 @@ const ReseniasPage = () => {
       ]}
       deleteMessage={(item) => (
         <p>
-          ¿Estás seguro de que deseas eliminar la reseña{' '}
+          ¿Estás seguro de que deseas eliminar el historial de visita{' '}
           <strong>{item?.nombre}</strong>?
         </p>
       )}
-      deleteButtonText="Eliminar Reseña"
+      deleteButtonText="Eliminar Historial de Visita"
     />
   )
 }
 
-export default ReseniasPage
+export default HistorialVisitasRestaurantPage

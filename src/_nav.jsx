@@ -224,6 +224,11 @@ const _nav = [
         component: CNavItem,
         name: 'Reseñas',
         to: '/resenias/listar',
+      },
+      {
+        component: CNavItem,
+        name: 'Historial de Visitas',
+        to: '/historial-visitas',
       }
     ],
   },
