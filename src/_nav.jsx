@@ -220,6 +220,16 @@ const _nav = [
         name: 'Clientes',
         to: '/cliente/listar',
       },
+      {
+        component: CNavItem,
+        name: 'Reseñas',
+        to: '/resenias/listar',
+      },
+      {
+        component: CNavItem,
+        name: 'Historial de Visitas',
+        to: '/historial-visitas',
+      }
     ],
   },
   {

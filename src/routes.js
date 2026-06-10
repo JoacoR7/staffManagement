@@ -116,6 +116,11 @@ const EmpresaPage = React.lazy(() => import('./views/pages/empresa/EmpresaPage')
 
 const ItemPage = React.lazy(() => import('./views/pages/items/ItemPage'))
 
+const ReseniasPage = React.lazy(() => import('./views/pages/resenias/ReseniasPage'))
+const HistorialVisitasRestaurantPage = React.lazy(
+  () => import('./views/pages/historialVisitasRestaurant/HistorialVisitasRestaurantPage'),
+)
+
 /**
  * Array of route configuration objects
  *
@@ -181,6 +186,7 @@ export const routes = [
   { path: '/notifications/modals', name: 'Modals', element: Modals },
   { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
   { path: '/widgets', name: 'Widgets', element: Widgets },
+  { path: '/resenias/listar', name: 'Reseñas', element: ReseniasPage },
   { path: '/paises/listar', name: 'Paises', element: PaisPage },
   { path: '/provincias/listar', name: 'Provincias', element: ProvinciaPage },
   { path: '/departamentos/listar', name: 'Departamento', element: DepartamentoPage },
@@ -199,7 +205,8 @@ export const routes = [
   { path: '/direccion/listar', name: 'Direcciones', element: DireccionPage },
   { path: '/cliente/listar', name: 'Clientes', element: ClientePage },
   { path: '/empresa/listar', name: 'Empresa', element: EmpresaPage },
-  { path: '/items/listar', name: 'Items', element: ItemPage }
+  { path: '/items/listar', name: 'Items', element: ItemPage },
+  { path: '/historial-visitas', name: 'Historial de Visitas', element: HistorialVisitasRestaurantPage }
 ]
 
 export default routes
