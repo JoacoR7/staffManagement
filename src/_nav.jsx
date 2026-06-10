@@ -191,6 +191,11 @@ const _nav = [
         name: 'Recibos de sueldo',
         to: '/recibos-de-sueldo/listar',
       },
+      {
+        component: CNavItem,
+        name: 'Items de recibo de sueldo',
+        to: '/items/listar',
+      }
     ],
   },
   {
