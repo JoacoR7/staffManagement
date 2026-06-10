@@ -12,7 +12,6 @@ const ArticulosPage = () => {
   const cargarUnidades = async () => {
     try {
       const token = localStorage.getItem('token')
-      console.log(token)
       const response = await fetch(
         `${API_URL}/api/v1/unidadDeMedida`,
         {
