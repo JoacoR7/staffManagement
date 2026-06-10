@@ -116,6 +116,8 @@ const EmpresaPage = React.lazy(() => import('./views/pages/empresa/EmpresaPage')
 
 const ItemPage = React.lazy(() => import('./views/pages/items/ItemPage'))
 
+const ReseniasPage = React.lazy(() => import('./views/pages/resenias/ReseniasPage'))
+
 /**
  * Array of route configuration objects
  *
@@ -181,6 +183,7 @@ export const routes = [
   { path: '/notifications/modals', name: 'Modals', element: Modals },
   { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
   { path: '/widgets', name: 'Widgets', element: Widgets },
+  { path: '/resenias/listar', name: 'Reseñas', element: ReseniasPage },
   { path: '/paises/listar', name: 'Paises', element: PaisPage },
   { path: '/provincias/listar', name: 'Provincias', element: ProvinciaPage },
   { path: '/departamentos/listar', name: 'Departamento', element: DepartamentoPage },
