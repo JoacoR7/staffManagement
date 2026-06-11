@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useAuth } from 'src/context/AuthContext'
-import { Link } from 'react-router-dom'
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
+
 import {
   CButton,
   CCard,
@@ -15,15 +15,17 @@ import {
   CInputGroupText,
   CRow,
 } from '@coreui/react'
+
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import { logo } from 'src/assets/brand/logo'
 
 const Login = () => {
   const { login } = useAuth()
   const navigate = useNavigate()
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -33,74 +35,73 @@ const Login = () => {
       navigate('/dashboard')
     } catch (err) {
       console.error(err.message)
-      alert("Login fallido")
+      alert('Login fallido')
     }
   }
+
   return (
-    <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
+    <div className="bg-body-tertiary min-vh-100 d-flex align-items-center">
       <CContainer>
         <CRow className="justify-content-center">
-          <CCol md={8}>
-            <CCardGroup>
+          <CCol md={10} lg={8}>
+            <CCardGroup className="shadow">
+
+              {/* LOGIN */}
               <CCard className="p-4">
                 <CCardBody>
                   <CForm onSubmit={handleSubmit}>
                     <h1>Login</h1>
-                    <p className="text-body-secondary">Sign In to your account</p>
+                    <p className="text-body-secondary">
+                      Ingrese a su cuenta
+                    </p>
+
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput 
-                        placeholder="your@email.com" 
-                        autoComplete="username" //email??
+                      <CFormInput
+                        placeholder="ejemplo@email.com"
+                        autoComplete="username"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                       />
                     </CInputGroup>
+
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
                       <CFormInput
                         type="password"
-                        placeholder="Password"
+                        placeholder="Contraseña"
                         autoComplete="current-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                       />
                     </CInputGroup>
-                    <CRow>
-                      <CCol xs={6}>
-                        <CButton color="primary" className="px-4" type="submit">
-                          Login
-                        </CButton>
-                      </CCol>
-                      <CCol xs={6} className="text-right">
-                        <CButton color="link" className="px-0">
-                          Forgot password?
-                        </CButton>
-                      </CCol>
-                    </CRow>
+
+                    <CButton color="primary" className="w-100" type="submit">
+                      Ingresar
+                    </CButton>
                   </CForm>
                 </CCardBody>
               </CCard>
-              <CCard className="text-white bg-primary py-5" style={{ width: '44%' }}>
-                <CCardBody className="text-center">
-                  <div>
-                    <h2>Sign up</h2>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua.
-                    </p>
-                    <Link to="/register">
-                      <CButton color="primary" className="mt-3" active tabIndex={-1}>
-                        Register Now!
-                      </CButton>
-                    </Link>
-                  </div>
+
+              {/* BRAND (RESPONSIVE Y SIN DESBORDES) */}
+              <CCard className="text-white bg-primary d-none d-md-flex overflow-hidden">
+                <CCardBody className="d-flex align-items-center justify-content-center text-center p-4">
+                  <CIcon
+                    icon={logo}
+                    style={{
+                      width: '100%',
+                      maxWidth: 280,
+                      height: 'auto',
+                      display: 'block'
+                    }}
+                  />
                 </CCardBody>
               </CCard>
+
             </CCardGroup>
           </CCol>
         </CRow>
