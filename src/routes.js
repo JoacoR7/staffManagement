@@ -75,13 +75,12 @@ const ProvinciaPage = React.lazy(() => import('./views/pages/provincias/Provinci
 const DepartamentoPage = React.lazy(() => import('./views/pages/departamentos/DepartamentoPage'))
 const LocalidadPage = React.lazy(() => import('./views/pages/localidades/LocalidadPage'))
 
-
-
 // Sección artículos
 //Artículos
 const ArticulosPage = React.lazy(() => import('./views/pages/articulos/ArticulosPage'))
 
 const ReciboPage = React.lazy(() => import('./views/pages/reciboDeSueldo/ReciboPage'))
+const ComandaPage = React.lazy(() => import('./views/pages/comanda/ComandaPage'))
 
 // Unidades de medida
 const UnidadesDeMedidaPage = React.lazy(
@@ -95,14 +94,16 @@ const PromocionPage = React.lazy(() => import('./views/pages/promocion/Promocion
 const StockPage = React.lazy(() => import('./views/pages/stock/StockPage'))
 
 // Movimiento stock
-const MovimientoStockPage = React.lazy(() => import('./views/pages/movimientoStock/MovimientoStockPage'))
+const MovimientoStockPage = React.lazy(
+  () => import('./views/pages/movimientoStock/MovimientoStockPage'),
+)
 
 // Sección empleados
 const EmpleadoPage = React.lazy(() => import('./views/pages/empleado/EmpleadoPage'))
 const RegistroHorarioPage = React.lazy(
   () => import('./views/pages/registroHorario/RegistroHorario'),
 )
-
+const ItemReciboPage = React.lazy(() => import('./views/pages/itemRecibo/ItemReciboPage'))
 
 /**
  * Array of route configuration objects
@@ -179,6 +180,8 @@ export const routes = [
   { path: '/empleados/listar', name: 'Empleados', element: EmpleadoPage },
   { path: '/registroHorario/listar', name: 'Registro Horario', element: RegistroHorarioPage },
   { path: '/recibos-de-sueldo/listar', name: 'Recibos de Sueldo', element: ReciboPage },
+  { path: '/item-recibo/listar', name: 'Ítems Recibo de Sueldo', element: ItemReciboPage },
+  { path: '/comandas/listar', name: 'Comandas', element: ComandaPage },
   { path: '/stock/listar', name: 'Stock', element: StockPage },
   { path: '/movimientos-stock/listar', name: 'Movimiento Stock', element: MovimientoStockPage },
 ]

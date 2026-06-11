@@ -128,7 +128,7 @@ const ReciboForm = ({
     const payload = {
       empleado: { id: formData.empleadoId },
       fechaDePago: fechaISO,
-      mesPago: formData.mesPago ? Number(formData.mesPago) : null,
+      mesPago: formData.mesPago ? Number(formData.mesPago) : 0,
       observacion: formData.observacion || '',
       detalles: detalles.map((d) => {
         const itemDetalle = {

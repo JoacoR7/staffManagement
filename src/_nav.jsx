@@ -27,7 +27,7 @@ import {
   cilSpeedometer,
   cilStar,
   cilBasket,
-  cilPeople
+  cilPeople,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -140,7 +140,7 @@ const _nav = [
         component: CNavItem,
         name: 'Movimiento stock',
         to: '/movimientos-stock/listar',
-      }
+      },
     ],
   },
   {
@@ -162,7 +162,17 @@ const _nav = [
         component: CNavItem,
         name: 'Recibos de sueldo',
         to: '/recibos-de-sueldo/listar',
-      }
+      },
+      {
+        component: CNavItem,
+        name: 'Ítems Recibo de Sueldo',
+        to: '/item-recibo/listar',
+      },
+      {
+        component: CNavItem,
+        name: 'Comanda',
+        to: '/comandas/listar',
+      },
     ],
   },
   {
