@@ -12,7 +12,7 @@
 
 import React from 'react'
 import CIcon from '@coreui/icons-react'
-import { cilGlobeAlt } from '@coreui/icons'
+import { cilFastfood, cilGlobeAlt } from '@coreui/icons'
 import {
   cilBell,
   cilCalculator,
@@ -121,7 +121,7 @@ const _nav = [
   {
     component: CNavGroup,
     name: 'Carta',
-    icon: <CIcon icon={cilGlobeAlt} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilFastfood} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
@@ -196,7 +196,7 @@ const _nav = [
         component: CNavItem,
         name: 'Items de recibo de sueldo',
         to: '/items/listar',
-      }
+      },
     ],
   },
   {
@@ -230,7 +230,7 @@ const _nav = [
         component: CNavItem,
         name: 'Historial de Visitas',
         to: '/historial-visitas',
-      }
+      },
     ],
   },
 ]
