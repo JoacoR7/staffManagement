@@ -1,9 +1,10 @@
 import React from 'react'
 import GenericPage from '../../components/generic/GenericPage'
+import { API_URL } from '@/config'
 
 const PromocionPage = () => (
   <GenericPage
-    apiBase="http://localhost:9000/api/v1/promocion"
+    apiBase={`${API_URL}/api/v1/promocion`}
     tituloLista="Lista de Promociones"
     titulos={{
       crear: 'Nueva Promoción',

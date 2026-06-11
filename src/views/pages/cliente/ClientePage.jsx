@@ -3,7 +3,7 @@ import GenericPage from '../../components/generic/GenericPage'
 import { useApi } from '@/hooks/useApi'
 import { API_URL } from '@/config'
 
-const EmpleadoPage = () => {
+const ClientePage = () => {
   const { apiFetch } = useApi()
   const [direcciones, setDirecciones] = useState([])
 
@@ -24,31 +24,40 @@ const EmpleadoPage = () => {
 
   return (
     <GenericPage
-      apiBase={`${API_URL}/api/v1/empleado`}
-      apiCrear={`${API_URL}/api/v1/empleado/crear`}
+      apiBase={`${API_URL}/api/v1/cliente`}
+      apiCrear={`${API_URL}/api/v1/cliente/crear`}
+      apiEditar={`${API_URL}/api/v1/cliente/editar`}
       cargarDetalle={async (item) => {
-        const res = await apiFetch(`${API_URL}/api/v1/empleado/${item.id}`)
+        const res = await apiFetch(`${API_URL}/api/v1/cliente/${item.id}`)
         const data = await res.json()
-        return { ...data, direccionId: data.direccionId }
+
+        // Extraer el primer contacto telefónico
+        const contacto = data.contacto?.[0] ?? {}
+
+        return {
+          ...data,
+          // Campos del contacto aplanados
+          tipoContacto: contacto.tipoContacto ?? '',
+          tipoTelefono: contacto.tipoTelefono ?? '',
+          contactoTelefono: contacto.telefono ?? '',
+          observacion: contacto.observacion ?? '',
+          // Dirección
+          direccionId: data.direccion?.id ?? '',
+          // esTurista: tiene direccionEstadia y no tiene direccion
+          esTurista: !!data.direccionEstadia && !data.direccion,
+        }
       }}
-      multipart={true}
-      tituloLista="Lista de empleados"
+      tituloLista="Lista de clientes"
       titulos={{
-        crear: 'Nuevo Empleado',
-        editar: 'Modificar Empleado',
-        ver: 'Detalle del Empleado',
+        crear: 'Nuevo Cliente',
+        editar: 'Modificar Cliente',
+        ver: 'Detalle del Cliente',
       }}
       columns={[
         { key: 'nombre', label: 'Nombre' },
         { key: 'apellido', label: 'Apellido' },
         { key: 'tipoDocumentacion', label: 'Tipo doc.' },
         { key: 'dni', label: 'DNI' },
-        { key: 'tipoEmpleado', label: 'Tipo empleado' },
-        {
-          key: 'email',
-          label: 'Email',
-          render: (_, item) => item.contacto?.find((c) => c.email)?.email ?? '-',
-        },
       ]}
       fields={[
         { key: 'nombre', label: 'Nombre', required: true },
@@ -66,20 +75,6 @@ const EmpleadoPage = () => {
         },
         { key: 'dni', label: 'DNI', required: true },
         { key: 'fechaNacimiento', label: 'Fecha de nacimiento', type: 'date', required: true },
-        { key: 'foto', label: 'Foto de perfil', type: 'file' },
-        {
-          key: 'tipoEmpleado',
-          label: 'Tipo de empleado',
-          type: 'select',
-          rawValue: true,
-          required: true,
-          options: [
-            { value: 'ADMINISTRATIVO', label: 'Administrativo' },
-            { value: 'MOZO', label: 'Mozo' },
-            { value: 'DELIVERY', label: 'Delivery' },
-            { value: 'COCINERO', label: 'Cocinero' },
-          ],
-        },
         {
           key: 'tipoContacto',
           label: 'Tipo de contacto',
@@ -92,7 +87,6 @@ const EmpleadoPage = () => {
             { value: 'EMPRESA', label: 'Empresa' },
           ],
         },
-        { key: 'email', label: 'Email', type: 'email', required: true },
         {
           key: 'tipoTelefono',
           label: 'Tipo de teléfono',
@@ -106,19 +100,10 @@ const EmpleadoPage = () => {
         },
         { key: 'contactoTelefono', label: 'Teléfono', required: true },
         { key: 'observacion', label: 'Observación', type: 'textarea' },
-        { key: 'password', label: 'Contraseña', type: 'password', required: true },
         {
-          key: 'rol',
-          label: 'Rol',
-          type: 'select',
-          rawValue: true,
-          required: true,
-          options: [
-            { value: 'ADMINISTRATIVO', label: 'Administrativo' },
-            { value: 'MOZO', label: 'Mozo' },
-            { value: 'CLIENTE', label: 'Cliente' },
-            { value: 'COCINERO', label: 'Cocinero' },
-          ],
+          key: 'esTurista',
+          label: '¿Es turista?',
+          type: 'checkbox',
         },
         {
           key: 'direccionId',
@@ -127,6 +112,14 @@ const EmpleadoPage = () => {
           rawValue: true,
           required: true,
           options: direcciones,
+          visible: (values) => !values.esTurista,
+        },
+        {
+          key: 'direccionEstadia',
+          label: 'Dirección',
+          required: true,
+          placeholder: 'Ej: Hotel San Martín',
+          visible: (values) => values.esTurista,
         },
       ]}
       deleteMessage={(item) => (
@@ -138,9 +131,9 @@ const EmpleadoPage = () => {
           ?
         </p>
       )}
-      deleteButtonText="Eliminar Empleado"
+      deleteButtonText="Eliminar Cliente"
     />
   )
 }
 
-export default EmpleadoPage
+export default ClientePage

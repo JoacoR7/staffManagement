@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import GenericPage from '../../components/generic/GenericPage'
+import { API_URL } from '@/config'
 
 const ArticulosPage = () => {
   const [unidades, setUnidades] = useState([])
@@ -12,7 +13,7 @@ const ArticulosPage = () => {
     try {
       const token = localStorage.getItem('token')
       const response = await fetch(
-        'http://localhost:9000/api/v1/unidadDeMedida',
+        `${API_URL}/api/v1/unidadDeMedida`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -34,10 +35,12 @@ const ArticulosPage = () => {
     }
   }
 
-
   return (
     <GenericPage
-      apiBase="http://localhost:9000/api/v1/articulo"
+      apiBase={`${API_URL}/api/v1/articulo`}
+      apiCrear={`${API_URL}/api/v1/articulo/crear`}
+      apiEditar={`${API_URL}/api/v1/articulo/editar`}
+      multipart={true}
       tituloLista="Lista de Artículos"
       titulos={{
         crear: 'Nuevo Artículo',
@@ -55,7 +58,6 @@ const ArticulosPage = () => {
           label: 'Stock Actual',
           render: (stocks) => {
             const stockActivo = stocks?.find((s) => !s.eliminado)
-
             return stockActivo
               ? stockActivo.cantidadActual
               : 'Sin stock'
@@ -66,7 +68,6 @@ const ArticulosPage = () => {
           label: 'Stock Mínimo',
           render: (stocks) => {
             const stockActivo = stocks?.find((s) => !s.eliminado)
-
             return stockActivo
               ? stockActivo.minimo
               : '-'
@@ -103,8 +104,17 @@ const ArticulosPage = () => {
           key: 'unidadDeMedida',
           label: 'Unidad de Medida',
           type: 'select',
+          rawValue: true,
           required: true,
           options: unidades,
+        },
+        {
+          key: 'imagen',
+          label: 'Imagen',
+          type: 'file',
+          previewUrl: (entity) => entity?.imagen?.id
+            ? `${API_URL}/api/v1/imagen/${entity.imagen.id}`
+            : null,
         },
       ]}
       deleteMessage={(item) => (

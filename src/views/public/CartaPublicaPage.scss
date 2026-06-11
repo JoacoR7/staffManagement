@@ -1,0 +1,640 @@
+$wine: #6b2737;
+$wine-light: rgba(107, 39, 55, 0.15);
+$gold: #c5a35a;
+$gold-light: rgba(197, 163, 90, 0.25);
+$cream-start: #f8f3ea;
+$cream-end: #efe6d3;
+$text: #1a1410;
+$card-bg: rgba(255, 255, 255, 0.6);
+
+.carta-publica {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(107, 39, 55, 0.045) 0%, transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(197, 163, 90, 0.035) 0%, transparent 50%),
+    linear-gradient(180deg, $cream-start 0%, $cream-end 100%);
+  box-shadow: inset 0 0 120px rgba(107, 39, 55, 0.035);
+  color: $text;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  line-height: 1.55;
+}
+
+/* ── Hero ─────────────────────────────────────────── */
+
+.carta-publica__hero {
+  text-align: center;
+  padding: 5rem 1.5rem 1.5rem;
+  position: relative;
+}
+
+.carta-publica__wine-icon {
+  width: 34px;
+  height: 34px;
+  color: $wine;
+  margin-bottom: 1.25rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.carta-publica__kicker {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5em;
+  font-size: 0.8rem;
+  color: $wine;
+  margin: 0 0 1rem;
+  padding-left: 0.5em;
+}
+
+.carta-publica__title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2.6rem, 7vw, 4.2rem);
+  font-weight: 700;
+  font-style: italic;
+  margin: 0 auto 0.5rem;
+  max-width: 18ch;
+  line-height: 1;
+  color: $text;
+  letter-spacing: -0.01em;
+}
+
+.carta-publica__subtitle {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.15rem;
+  font-style: italic;
+  font-weight: 500;
+  color: $wine;
+  letter-spacing: 0.18em;
+  margin: 0 0 2rem;
+}
+
+.carta-publica__divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  margin: 1.75rem auto;
+  max-width: 22rem;
+  color: $gold;
+}
+
+.carta-publica__divider-line {
+  flex: 1;
+  height: 1.5px;
+  background: $gold;
+  border-radius: 1px;
+  opacity: 0.7;
+}
+
+.carta-publica__divider-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.carta-publica__dates {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.2rem;
+  color: $wine;
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+
+  em {
+    font-style: italic;
+    font-weight: 700;
+    color: $text;
+  }
+}
+
+/* ── Main ─────────────────────────────────────────── */
+
+.carta-publica__main {
+  flex: 1;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 4rem;
+  width: 100%;
+}
+
+/* ── Category ─────────────────────────────────────── */
+
+.carta-categoria {
+  margin-bottom: 3.5rem;
+  position: relative;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.carta-categoria__header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.carta-categoria__title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+  color: $wine;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.carta-categoria__rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  margin: 1rem auto 0;
+  max-width: 13rem;
+}
+
+.carta-categoria__rule-line {
+  flex: 1;
+  height: 1.5px;
+  background: $gold;
+  border-radius: 1px;
+  opacity: 0.6;
+}
+
+.carta-categoria__rule-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: $gold;
+}
+
+/* ── Items ────────────────────────────────────────── */
+
+.carta-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &--separated {
+    border-top: 1px dashed rgba(107, 39, 55, 0.15);
+    padding-top: 1rem;
+  }
+}
+
+.carta-item-card {
+  display: flex;
+  gap: 1.25rem;
+  background: $card-bg;
+  border: 1px solid $wine-light;
+  border-radius: 10px;
+  padding: 0.85rem;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.75);
+    border-color: $wine;
+    box-shadow: 0 6px 20px -8px rgba(107, 39, 55, 0.2);
+  }
+}
+
+.carta-item-card__image-col {
+  flex-shrink: 0;
+  width: 100px;
+  height: 100px;
+}
+
+.carta-item-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid $wine-light;
+
+  &--placeholder {
+    background: rgba(255, 255, 255, 0.55);
+    border: 1.5px dashed $gold-light;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    &::after {
+      content: 'Sin imagen';
+      position: absolute;
+      font-size: 0.75rem;
+      color: $gold;
+      font-style: italic;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      opacity: 0.7;
+    }
+  }
+}
+
+.carta-item-card__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.carta-item-card__name {
+  font-family: 'Playfair Display', Georgia, serif;
+  margin: 0 0 0.2rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: $text;
+  letter-spacing: 0.005em;
+}
+
+.carta-item-card__desc {
+  margin: 0 0 0.4rem;
+  font-size: 1.05rem;
+  color: $wine;
+  line-height: 1.45;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.carta-item-card__price {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: $cream-start;
+  background: $wine;
+  display: inline-block;
+  padding: 0.1rem 0.75rem;
+  border-radius: 999px;
+  align-self: flex-start;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Footer ───────────────────────────────────────── */
+
+.carta-publica__footer {
+  text-align: center;
+  padding: 2.5rem 1.5rem 3rem;
+  color: $wine;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+
+  .carta-publica__wine-icon {
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    margin: 0;
+    font-style: italic;
+    font-weight: 600;
+    color: $wine;
+  }
+}
+
+/* ── States ───────────────────────────────────────── */
+
+.carta-publica__state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 2rem;
+  text-align: center;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+
+  h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    margin: 1.25rem 0 0.5rem;
+    font-weight: 600;
+    font-size: 1.6rem;
+    color: $text;
+  }
+
+  p {
+    color: $wine;
+    max-width: 28rem;
+    line-height: 1.5;
+    font-style: italic;
+    font-weight: 500;
+  }
+}
+
+.carta-publica__state-icon {
+  width: 4.5rem;
+  height: 4.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1.5px solid $wine-light;
+  border-radius: 50%;
+  color: $wine;
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+.carta-publica__btn {
+  margin-top: 1.5rem;
+  padding: 0.7rem 1.75rem;
+  background: transparent;
+  color: $wine;
+  border: 1px solid $wine;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+
+  &:hover {
+    background: $wine;
+    color: $cream-start;
+  }
+}
+
+/* ── Skeleton ─────────────────────────────────────── */
+
+.skeleton {
+  background: linear-gradient(90deg, #ddccc0 25%, #ece0cc 50%, #ddccc0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  border-radius: 4px;
+
+  &--ornament {
+    width: 2.4rem;
+    height: 2.4rem;
+    margin: 0 auto 1.25rem;
+    border-radius: 50%;
+  }
+  &--kicker {
+    width: 11rem;
+    height: 0.85rem;
+    margin: 0 auto 1rem;
+  }
+  &--title {
+    width: 70%;
+    max-width: 24rem;
+    height: 2.5rem;
+    margin: 0 auto 0.5rem;
+  }
+  &--subtitle {
+    width: 14rem;
+    max-width: 60%;
+    height: 1rem;
+    margin: 0 auto 2rem;
+  }
+  &--dates {
+    width: 18rem;
+    max-width: 80%;
+    height: 1rem;
+    margin: 0 auto;
+  }
+  &--cat-title {
+    width: 18rem;
+    max-width: 70%;
+    height: 1.6rem;
+    margin: 0 auto 1rem;
+  }
+  &--item-name {
+    width: 12rem;
+    height: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  &--item-line {
+    width: 100%;
+    height: 1.5rem;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-categoria {
+  margin-bottom: 3.5rem;
+}
+
+/* ── Modal ─────────────────────────────────────────── */
+
+.carta-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(26, 20, 16, 0.55);
+  animation: modal-fade-in 0.2s ease;
+}
+
+.carta-modal {
+  position: relative;
+  background: linear-gradient(180deg, $cream-start 0%, $cream-end 100%);
+  border: 1px solid rgba(107, 39, 55, 0.25);
+  border-radius: 14px;
+  max-width: 520px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px -12px rgba(26, 20, 16, 0.35);
+  animation: modal-scale-in 0.25s ease;
+}
+
+.carta-modal__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(107, 39, 55, 0.2);
+  border-radius: 50%;
+  color: $wine;
+  cursor: pointer;
+  z-index: 1;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: $wine;
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.carta-modal__image {
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+  border-radius: 14px 14px 0 0;
+  display: block;
+
+  &--placeholder {
+    height: 200px;
+    background: rgba(255, 255, 255, 0.4);
+    border-bottom: 1.5px dashed $gold-light;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 3rem;
+      height: 3rem;
+      color: rgba(197, 163, 90, 0.4);
+    }
+  }
+}
+
+.carta-modal__body {
+  padding: 1.75rem 2rem 2.25rem;
+  text-align: center;
+}
+
+.carta-modal__name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+  color: $text;
+}
+
+.carta-modal__desc {
+  font-size: 1.05rem;
+  color: $wine;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.carta-modal__divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 1.1rem auto;
+  max-width: 8rem;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1.5px;
+    background: $gold;
+    border-radius: 1px;
+    opacity: 0.5;
+  }
+}
+
+.carta-modal__price {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: $cream-start;
+  background: $wine;
+  display: inline-block;
+  padding: 0.2rem 1.25rem;
+  border-radius: 999px;
+}
+
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ── Responsive ───────────────────────────────────── */
+
+@media (max-width: 540px) {
+  .carta-publica__hero {
+    padding: 3.5rem 1rem 1rem;
+  }
+
+  .carta-publica__main {
+    padding: 1rem 1rem 3rem;
+  }
+
+  .carta-categoria {
+    margin-bottom: 2.5rem;
+  }
+
+  .carta-categoria__title {
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+  }
+
+  .carta-item-card {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .carta-item-card__image-col {
+    width: 100%;
+    height: 160px;
+  }
+
+  .carta-modal__image {
+    height: 220px;
+  }
+
+  .carta-modal__body {
+    padding: 1.25rem 1.25rem 1.75rem;
+  }
+
+  .carta-modal__name {
+    font-size: 1.4rem;
+  }
+
+  .carta-modal__price {
+    font-size: 1.35rem;
+  }
+}

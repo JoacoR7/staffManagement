@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import GenericPage from '../../components/generic/GenericPage'
 import { useApi } from '@/hooks/useApi'
+import { API_URL } from '@/config'
 import ReciboForm from './ReciboForm'
 
 const meses = [
@@ -35,7 +36,7 @@ const ReciboPage = () => {
 
   const cargarEmpleados = async () => {
     try {
-      const res = await apiFetch('http://localhost:9000/api/v1/empleado')
+      const res = await apiFetch(`${API_URL}/api/v1/empleado`)
       if (!res) return
       const data = await res.json()
       setEmpleados((data || []).map((e) => ({ value: e.id, label: `${e.nombre} ${e.apellido}` })))
@@ -44,7 +45,7 @@ const ReciboPage = () => {
 
   const cargarItems = async () => {
     try {
-      const res = await apiFetch('http://localhost:9000/api/v1/itemReciboDeSueldo')
+      const res = await apiFetch(`${API_URL}/api/v1/itemReciboDeSueldo`)
       if (res) {
         const data = await res.json()
         const list = Array.isArray(data) ? data : data.content || []
@@ -89,7 +90,7 @@ const ReciboPage = () => {
 
   return (
     <GenericPage
-      apiBase="http://localhost:9000/api/v1/reciboDeSueldo"
+      apiBase={`${API_URL}/api/v1/reciboDeSueldo`}
       tituloLista="Lista de Recibos de Sueldo"
       columns={columns}
 
@@ -110,7 +111,7 @@ const ReciboPage = () => {
         )
       }}
       cargarDetalle={async (item) => {
-        const res = await apiFetch(`http://localhost:9000/api/v1/reciboDeSueldo/${item.id}`)
+        const res = await apiFetch(`${API_URL}/api/v1/reciboDeSueldo/${item.id}`)
         return await res.json()
       }}
       renderForm={(props) => (

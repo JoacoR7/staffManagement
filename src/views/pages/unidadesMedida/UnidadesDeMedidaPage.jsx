@@ -1,9 +1,10 @@
 import React from 'react'
 import GenericPage from '../../components/generic/GenericPage'
+import { API_URL } from '@/config'
 
 const UnidadesDeMedidaPage = () => (
   <GenericPage
-    apiBase="http://localhost:9000/api/v1/unidadDeMedida"
+    apiBase={`${API_URL}/api/v1/unidadDeMedida`}
     tituloLista="Lista de Unidades de Medida"
     titulos={{
       crear: 'Nueva Unidad de Medida',

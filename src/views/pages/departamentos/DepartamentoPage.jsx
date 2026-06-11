@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import GenericPage from '../../components/generic/GenericPage'
 import { useApi } from '../../../hooks/useApi'
+import { API_URL } from '@/config'
 
 const DepartamentoPage = () => {
   const { apiFetch } = useApi()
@@ -14,7 +15,7 @@ const DepartamentoPage = () => {
 
   const cargarPaises = async () => {
     try {
-      const response = await apiFetch('http://localhost:9000/api/v1/pais')
+      const response = await apiFetch(`${API_URL}/api/v1/pais`)
 
       if (!response.ok) return
 
@@ -38,7 +39,7 @@ const DepartamentoPage = () => {
         return
       }
 
-      const response = await apiFetch(`http://localhost:9000/api/v1/provincia/pais/${paisId}`)
+      const response = await apiFetch(`${API_URL}/api/v1/provincia/pais/${paisId}`)
 
       if (!response.ok) return
 
@@ -85,7 +86,7 @@ const DepartamentoPage = () => {
 
   return (
     <GenericPage
-      apiBase="http://localhost:9000/api/v1/departamento"
+      apiBase={`${API_URL}/api/v1/departamento`}
       tituloLista="Lista de Departamentos"
       titulos={{
         crear: 'Nuevo Departamento',
