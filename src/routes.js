@@ -103,7 +103,6 @@ export const routes = [
   { path: '/empleados/listar', name: 'Empleados', element: EmpleadoPage },
   { path: '/registroHorario/listar', name: 'Registro Horario', element: RegistroHorarioPage },
   { path: '/recibos-de-sueldo/listar', name: 'Recibos de Sueldo', element: ReciboPage },
-  { path: '/item-recibo/listar', name: 'Ítems Recibo de Sueldo', element: ItemReciboPage },
   { path: '/comandas/listar', name: 'Comandas', element: ComandaPage },
   { path: '/stock/listar', name: 'Stock', element: StockPage },
   { path: '/movimientos-stock/listar', name: 'Movimiento Stock', element: MovimientoStockPage },
