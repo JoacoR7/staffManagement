@@ -16,9 +16,7 @@ import DetalleComandaModal from './DetalleComandaModal'
 const estadosComanda = [
   { value: 'ABIERTA', label: 'Abierta' },
   { value: 'PENDIENTE_DE_ENTREGA', label: 'Pendiente de Entrega' },
-  { value: 'FINALIZADA', label: 'Finalizada' },
   { value: 'ENTREGA_FALLIDA', label: 'Entrega Fallida' },
-  { value: 'ANULADA', label: 'Anulada' },
 ]
 
 const getArticuloNombre = (detalleSeccionCarta) => {
@@ -39,10 +37,12 @@ const ComandaForm = ({
   onGuardar,
   manejarError,
   itemsCarta,
+  clientes,
   formatearMoneda,
 }) => {
   const [formData, setFormData] = useState({
     estadoComanda: 'ABIERTA',
+    clienteId: '',
   })
   const [detalles, setDetalles] = useState([])
   const [detalleModalVisible, setDetalleModalVisible] = useState(false)
@@ -57,6 +57,7 @@ const ComandaForm = ({
     if (entity) {
       setFormData({
         estadoComanda: entity.estadoComanda ?? 'ABIERTA',
+        clienteId: entity.clienteId || '',
       })
       setDetalles((entity.detalles || []).map((d) => ({
         id: d.id,
@@ -69,6 +70,7 @@ const ComandaForm = ({
     } else {
       setFormData({
         estadoComanda: 'ABIERTA',
+        clienteId: '',
       })
       setDetalles([])
     }
@@ -79,6 +81,11 @@ const ComandaForm = ({
   }
 
   const guardar = () => {
+    if (!formData.clienteId) {
+      manejarError('Debe seleccionar un cliente')
+      return
+    }
+
     if (!detalles.length) {
       manejarError('Debe agregar al menos un detalle')
       return
@@ -97,6 +104,7 @@ const ComandaForm = ({
     }
 
     const payload = {
+      clienteId: formData.clienteId,
       estadoComanda: formData.estadoComanda,
       detalles: detalles.map((d) => {
         const itemDetalle = {
@@ -181,6 +189,20 @@ const ComandaForm = ({
         </strong>
       </CCardHeader>
       <CCardBody>
+        <div className="mb-3">
+          <CFormLabel>Cliente <span className="text-danger">*</span></CFormLabel>
+          <CFormSelect
+            disabled={soloLectura}
+            value={formData.clienteId}
+            onChange={(e) => handleChange('clienteId', e.target.value)}
+          >
+            <option value="">-- Seleccionar cliente --</option>
+            {clientes.map((c) => (
+              <option key={c.value} value={c.value}>{c.label}</option>
+            ))}
+          </CFormSelect>
+        </div>
+
         <div className="mb-3">
           <CFormLabel>Estado Comanda <span className="text-danger">*</span></CFormLabel>
           <CFormSelect

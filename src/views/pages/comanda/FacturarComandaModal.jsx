@@ -34,12 +34,12 @@ const FacturarComandaModal = ({
 
   const cargarFormasPago = async () => {
     try {
-      const res = await apiFetch('http://localhost:9000/api/v1/formaPago')
+      const res = await apiFetch('http://localhost:9000/api/v1/formaDePago')
       if (res && res.ok) {
         const data = await res.json()
         const list = Array.isArray(data) ? data : data.content || []
         if (list.length > 0) {
-          setFormasPago(list.map(f => ({ value: f.id, label: f.nombre || f.descripcion || f.id })))
+          setFormasPago(list.map(f => ({ value: f.id, label: f.metodoPago || f.id })))
           return
         }
       }
