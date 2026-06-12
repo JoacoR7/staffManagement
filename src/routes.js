@@ -18,7 +18,6 @@ import React from 'react'
 // Dashboard
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
-
 // Paises
 const PaisPage = React.lazy(() => import('./views/pages/paises/PaisPage'))
 const ProvinciaPage = React.lazy(() => import('./views/pages/provincias/ProvinciaPage'))
@@ -37,6 +36,9 @@ const ComandaPage = React.lazy(() => import('./views/pages/comanda/ComandaPage')
 const UnidadesDeMedidaPage = React.lazy(
   () => import('./views/pages/unidadesMedida/UnidadesDeMedidaPage'),
 )
+
+// Formas de pago
+const FormaDePagoPage = React.lazy(() => import('./views/pages/formaDePago/FormaDePagoPage'))
 
 // Promocion
 const PromocionPage = React.lazy(() => import('./views/pages/promocion/PromocionPage'))
@@ -71,6 +73,7 @@ const ReseniasPage = React.lazy(() => import('./views/pages/resenias/ReseniasPag
 const HistorialVisitasRestaurantPage = React.lazy(
   () => import('./views/pages/historialVisitasRestaurant/HistorialVisitasRestaurantPage'),
 )
+const FacturaPage = React.lazy(() => import('./views/pages/factura/FacturaPage'))
 
 /**
  * Array of route configuration objects
@@ -113,7 +116,13 @@ export const routes = [
   { path: '/cliente/listar', name: 'Clientes', element: ClientePage },
   { path: '/empresa/listar', name: 'Empresa', element: EmpresaPage },
   { path: '/items/listar', name: 'Items', element: ItemPage },
-  { path: '/historial-visitas', name: 'Historial de Visitas', element: HistorialVisitasRestaurantPage }
+  {
+    path: '/historial-visitas',
+    name: 'Historial de Visitas',
+    element: HistorialVisitasRestaurantPage,
+  },
+  { path: '/facturas/listar', name: 'Facturas', element: FacturaPage },
+  { path: '/forma-de-pago/listar', name: 'Formas de Pago', element: FormaDePagoPage },
 ]
 
 export default routes
