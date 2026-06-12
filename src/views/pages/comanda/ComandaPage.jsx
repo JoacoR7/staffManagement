@@ -2,25 +2,9 @@ import React, { useEffect, useState } from 'react'
 import GenericPage from '../../components/generic/GenericPage'
 import { useApi } from '@/hooks/useApi'
 import { CBadge } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
 import { cilDollar, cilBan } from '@coreui/icons'
 import ComandaForm from './ComandaForm'
 import FacturarComandaModal from './FacturarComandaModal'
-
-const meses = [
-  'Enero',
-  'Febrero',
-  'Marzo',
-  'Abril',
-  'Mayo',
-  'Junio',
-  'Julio',
-  'Agosto',
-  'Septiembre',
-  'Octubre',
-  'Noviembre',
-  'Diciembre',
-]
 
 const formatearFechaHora = (fechaISO) => {
   if (!fechaISO) return '-'

@@ -34,7 +34,7 @@ const inicializarDesdeEntity = (entity) => {
   }
 }
 
-const FacturaForm = ({ modo, entity, onClose, onGuardar }) => {
+const FacturaForm = ({ modo, entity, onClose }) => {
   const soloLectura = modo === 'ver'
 
   const [formasPago, setFormasPago] = useState([])
@@ -105,20 +105,6 @@ const FacturaForm = ({ modo, entity, onClose, onGuardar }) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  const handleGuardar = () => {
-    const payload = {
-      numeroFactura: Number(formData.numeroFactura),
-      fechaFactura: formData.fechaFactura
-        ? new Date(formData.fechaFactura + 'T00:00:00').toISOString()
-        : null,
-      totalPagado: formData.totalPagado,
-      estado: formData.estado,
-      formaPagoId: formData.formaPagoId,
-      promocionId: formData.promocionId || null,
-    }
-    onGuardar(payload)
-  }
-
   const renderDetallesProductos = () => {
     if (!entity || !entity.detalles || entity.detalles.length === 0) return null
 
@@ -183,13 +169,7 @@ const FacturaForm = ({ modo, entity, onClose, onGuardar }) => {
   return (
     <CCard className="shadow-sm">
       <CCardHeader>
-        <strong>
-          {modo === 'crear'
-            ? 'Nueva Factura'
-            : modo === 'editar'
-              ? 'Modificar Factura'
-              : 'Detalle de Factura'}
-        </strong>
+        <strong>Detalle de Factura</strong>
       </CCardHeader>
 
       <CCardBody>
@@ -277,15 +257,10 @@ const FacturaForm = ({ modo, entity, onClose, onGuardar }) => {
         {entity && entity.detalles && entity.detalles.length > 0 && renderDetallesProductos()}
       </CCardBody>
 
-      <CCardFooter className="d-flex justify-content-end gap-2">
+      <CCardFooter className="d-flex justify-content-end">
         <CButton color="secondary" onClick={onClose}>
-          Cancelar
+          Cerrar
         </CButton>
-        {!soloLectura && (
-          <CButton color="primary" disabled={!formData.formaPagoId} onClick={handleGuardar}>
-            Guardar
-          </CButton>
-        )}
       </CCardFooter>
     </CCard>
   )

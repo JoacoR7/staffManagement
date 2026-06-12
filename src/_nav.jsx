@@ -249,7 +249,6 @@ const _nav = [
         component: CNavItem,
         name: 'Facturas',
         to: '/facturas/listar',
-        icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
       },
       {
         component: CNavItem,

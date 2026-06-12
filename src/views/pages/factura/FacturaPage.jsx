@@ -81,12 +81,6 @@ const FacturaPage = () => (
       return await res.json()
     }}
     renderForm={(props) => <FacturaForm {...props} />}
-    deleteMessage={(item) => (
-      <p>
-        ¿Estás seguro de que deseas eliminar la factura N° <strong>{item?.numeroFactura}</strong>?
-      </p>
-    )}
-    deleteButtonText="Eliminar Factura"
   />
 )
 
