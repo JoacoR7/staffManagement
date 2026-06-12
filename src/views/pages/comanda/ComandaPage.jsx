@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import GenericPage from '../../components/generic/GenericPage'
 import { useApi } from '@/hooks/useApi'
+import { API_URL } from '@/config'
 import { CBadge } from '@coreui/react'
 import { cilDollar, cilBan } from '@coreui/icons'
 import ComandaForm from './ComandaForm'
@@ -49,9 +50,9 @@ const ComandaPage = () => {
 
   const cargarCartaYPromos = async () => {
     const results = await Promise.allSettled([
-      apiFetch('http://localhost:9000/api/v1/carta/activa'),
-      apiFetch('http://localhost:9000/api/v1/cliente'),
-      apiFetch('http://localhost:9000/api/v1/promocion'),
+      apiFetch(`${API_URL}/api/v1/carta/activa`),
+      apiFetch(`${API_URL}/api/v1/cliente`),
+      apiFetch(`${API_URL}/api/v1/promocion`),
     ])
 
     const [resCarta, resClientes, resPromociones] = results.map((r) =>
@@ -165,7 +166,7 @@ const ComandaPage = () => {
       className: 'text-danger',
       condition: (item) => item.estadoComanda !== 'FINALIZADA' && item.estadoComanda !== 'ANULADA',
       onClick: async (item) => {
-        const res = await apiFetch(`http://localhost:9000/api/v1/comanda/${item.id}/anular`, {
+        const res = await apiFetch(`${API_URL}/api/v1/comanda/${item.id}/anular`, {
           method: 'PUT',
         })
         if (!res.ok) {
@@ -179,7 +180,7 @@ const ComandaPage = () => {
   return (
     <>
       <GenericPage
-        apiBase="http://localhost:9000/api/v1/comanda"
+        apiBase={`${API_URL}/api/v1/comanda`}
         tituloLista="Gestión de Comandas"
         columns={columns}
         tamanioPagina={10}
@@ -192,7 +193,7 @@ const ComandaPage = () => {
           </p>
         )}
         cargarDetalle={async (item) => {
-          const res = await apiFetch(`http://localhost:9000/api/v1/comanda/${item.id}`)
+          const res = await apiFetch(`${API_URL}/api/v1/comanda/${item.id}`)
           return await res.json()
         }}
         accionesExtra={accionesExtra}
@@ -242,7 +243,7 @@ const ComandaPage = () => {
         onConfirmar={async (formaPagoId, promocionId) => {
           if (!facturandoConfig) return
           try {
-            let url = `http://localhost:9000/api/v1/comanda/${facturandoConfig.item.id}/facturar?formaPagoId=${formaPagoId}`
+            let url = `${API_URL}/api/v1/comanda/${facturandoConfig.item.id}/facturar?formaPagoId=${formaPagoId}`
             if (promocionId) {
               url += `&promocionId=${promocionId}`
             }
