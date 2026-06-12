@@ -10,6 +10,7 @@ import {
   CModalFooter,
 } from '@coreui/react'
 import { useApi } from '@/hooks/useApi'
+import { API_URL } from '@/config'
 
 const FacturarComandaModal = ({
   visible,
@@ -34,7 +35,7 @@ const FacturarComandaModal = ({
 
   const cargarFormasPago = async () => {
     try {
-      const res = await apiFetch('http://localhost:9000/api/v1/formaDePago')
+      const res = await apiFetch(`${API_URL}/api/v1/formaDePago`)
       if (res && res.ok) {
         const data = await res.json()
         const list = Array.isArray(data) ? data : data.content || []
